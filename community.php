@@ -19,12 +19,12 @@ function show_form_add()
 
 function add($db, $name, $alt_name)
 {
-	echo "<body>\n";
-	echo "Adding community $name, $alt_name<BR>\n";
+	//echo "<body>\n";
+	//echo "Adding community $name, $alt_name<BR>\n";
 	$query = "insert into community_lu (name) values (\"$1\")";
 	$params = {$name};
 	//pg_query_params($db, $query, $params);
-	echo "</body>\n";
+	//echo "</body>\n";
 	return 0;
 }
 
@@ -43,6 +43,9 @@ echo "<HTML>\n";
 
 // figure out why the page was loaded
 $action=$_POST['action'];
+$community_name=$_POST['name'];
+$alt_name=$_POST['alt_name'];
+$db=0;
 
 switch($action)
 {
@@ -51,8 +54,6 @@ case "form_add":
 	break;
 
 case "add":
-	$community_name=$_POST['name'];
-	$alt_name=$_POST['alt_name'];
 	$ret=add($db, $community_name, $alt_name);
 	if ($ret==0)
 		echo "Community added ok\n";
@@ -64,7 +65,7 @@ default:
 	echo "$action is not a valid action\n";
 }
 
-done:
+//done:
 // end output
 echo "</HTML>\n";
 
