@@ -1,6 +1,6 @@
 <?php
 
-include 'db.php';
+//include 'db.php';
 
 // declare the functions
 
@@ -23,7 +23,7 @@ function add($db, $name, $alt_name)
 	echo "Adding community $name, $alt_name<BR>\n";
 	$query = "insert into community_lu (name) values (\"$1\")";
 	$params = {$name};
-	pg_query_params($db, $query, $params);
+	//pg_query_params($db, $query, $params);
 	echo "</body>\n";
 	return 0;
 }
@@ -34,12 +34,12 @@ echo "<HTML>\n";
 // make sure we're logged in
 
 // connect the database
-$db = connect_to_db();
-if (!$db)
-{
-	echo "Can't connect to the database\n";
-	goto done;
-}
+//$db = connect_to_db();
+//if (!$db)
+//{
+//	echo "Can't connect to the database\n";
+//	goto done;
+//}
 
 // figure out why the page was loaded
 $action=$_POST['action'];
