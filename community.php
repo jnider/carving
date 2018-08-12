@@ -6,18 +6,18 @@
 
 function show_form_add()
 {
-	echo "<head><title>Add community</title></head>\n";
-	echo "<body>\n";
+	//echo "<head><title>Add community</title></head>\n";
+	//echo "<body>\n";
 	echo "<form method=\"post\" action=\"community.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\" />\n";
 	echo "Name:<input type=\"text\" name=\"name\">\n";
 	echo "Alternative Name:<input type=\"text\" name=\"alt_name\"><BR>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
-	echo "</body>\n";
+	//echo "</body>\n";
 }
 
-function add($db, $name, $alt_name)
+function add($name, $alt_name)
 {
 	//echo "<body>\n";
 	//echo "Adding community $name, $alt_name<BR>\n";
@@ -29,7 +29,7 @@ function add($db, $name, $alt_name)
 }
 
 // start output
-echo "<HTML>\n";
+echo "<HTML>\n<body>\n";
 
 // make sure we're logged in
 
@@ -45,7 +45,6 @@ echo "<HTML>\n";
 $action=$_POST['action'];
 $community_name=$_POST['name'];
 $alt_name=$_POST['alt_name'];
-$db=0;
 
 switch($action)
 {
@@ -54,7 +53,7 @@ case "form_add":
 	break;
 
 case "add":
-	$ret=add($db, $community_name, $alt_name);
+	$ret=add($community_name, $alt_name);
 	if ($ret==0)
 		echo "Community added ok\n";
 	else
@@ -67,6 +66,6 @@ default:
 
 //done:
 // end output
-echo "</HTML>\n";
+echo "</body>\n</HTML>\n";
 
 ?>
