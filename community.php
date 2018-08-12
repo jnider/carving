@@ -1,5 +1,7 @@
 <?php
 
+include 'db.php';
+
 // declare the functions
 
 function show_form_add()
@@ -15,16 +17,29 @@ function show_form_add()
 	echo "</body>\n";
 }
 
-function add($name, $alt_name)
+function add($db, $name, $alt_name)
 {
 	echo "<body>\n";
 	echo "Adding community $name, $alt_name<BR>\n";
+	$query = "insert into community_lu (name) values (\"$1\")";
+	$params = {$name};
+	pg_query_params($db, $query, $params);
 	echo "</body>\n";
 	return 0;
 }
 
 // start output
 echo "<HTML>\n";
+
+// make sure we're logged in
+
+// connect the database
+$db = connect_to_db();
+if (!$db)
+{
+	echo "Can't connect to the database\n";
+	goto done;
+}
 
 // figure out why the page was loaded
 $action=$_POST['action'];
@@ -38,7 +53,7 @@ case "form_add":
 case "add":
 	$community_name=$_POST['name'];
 	$alt_name=$_POST['alt_name'];
-	$ret=add($community_name, $alt_name);
+	$ret=add($db, $community_name, $alt_name);
 	if ($ret==0)
 		echo "Community added ok\n";
 	else
@@ -49,6 +64,7 @@ default:
 	echo "$action is not a valid action\n";
 }
 
+done:
 // end output
 echo "</HTML>\n";
 
