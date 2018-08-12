@@ -46,7 +46,7 @@ case "add":
 	break;
 
 default:
-	echo "No action selected\n";
+	echo "$action is not a valid action\n";
 }
 
 // end output
