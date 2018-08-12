@@ -6,10 +6,10 @@ function show_form_add()
 {
 	echo "<head><title>Add community</title></head>\n";
 	echo "<body>\n";
-	echo "<form method=\"post\">\n";
-	echo "<input type=\"hidden\" value=\"action\" name=\"add\" />\n";
+	echo "<form method=\"post\" action=\"community.php\">\n";
+	echo "<input type=\"hidden\" name=\"action\" value=\"add\" />\n";
 	echo "Name:<input type=\"text\" name=\"name\">\n";
-	echo "Alternative Name:<input type=\"text\" name=\"alt_name\">\n";
+	echo "Alternative Name:<input type=\"text\" name=\"alt_name\"><BR>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
 	echo "</body>\n";
