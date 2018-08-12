@@ -1,4 +1,3 @@
-<HTML>
 <?php
 
 // declare the functions
@@ -24,8 +23,11 @@ function add($name, $alt_name)
 	return 0;
 }
 
+// start output
+echo "<HTML>\n";
+
 // figure out why the page was loaded
-action=$_POST['action'];
+$action=$_POST['action'];
 
 switch($action)
 {
@@ -34,8 +36,8 @@ case "form_add":
 	break;
 
 case "add":
-	community_name=$_POST['name'];
-	alt_name=$_POST['alt_name'];
+	$community_name=$_POST['name'];
+	$alt_name=$_POST['alt_name'];
 	$ret=add($community_name, $alt_name);
 	if ($ret==0)
 		echo "Community added ok\n";
@@ -46,5 +48,8 @@ case "add":
 default:
 	echo "No action selected\n";
 }
+
+// end output
+echo "</HTML>\n";
+
 ?>
-</HTML>
