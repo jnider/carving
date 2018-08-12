@@ -6,7 +6,7 @@ echo "<head>\n";
 echo "<title>Actions Menu</title>\n";
 echo "</head>\n";
 echo "<body>\n";
-echo "<a href=\"community.php?func=add\">Add Community</a><BR>\n";
+echo "<a href=\"community.php?action=form_add\">Add Community</a><BR>\n";
 echo "</body>\n";
 echo "</HTML>\n";
 ?>
