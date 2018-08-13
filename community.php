@@ -19,9 +19,9 @@ function add($db, $name, $alt_name)
 {
 	//echo "<body>\n";
 	//echo "Adding community $name, $alt_name<BR>\n";
-	//$query = "insert into community_lu (name) values (\"$1\")";
-	//$params = {$name};
-	//pg_query_params($db, $query, $params);
+	$query = "insert into community_lu (name) values (\"$1\")";
+	$params = {$name};
+	pg_query_params($db, $query, $params);
 	//echo "</body>\n";
 	return 0;
 }
@@ -53,11 +53,11 @@ case "form_add":
 	break;
 
 case "add":
-	//$ret=add($community_name, $alt_name);
-	//if ($ret==0)
-	//	echo "Community added ok\n";
-	//else
-	//	echo "Community not added: $ret\n";
+	$ret=add($community_name, $alt_name);
+	if ($ret==0)
+		echo "Community added ok\n";
+	else
+		echo "Community not added: $ret\n";
 	break;
 
 default:
