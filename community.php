@@ -19,10 +19,11 @@ function add($db, $name, $alt_name)
 {
 	//echo "<body>\n";
 	//echo "Adding community $name, $alt_name<BR>\n";
-	$query = "insert into community_lu (name) values (\"$1\")";
-	$params = {$name};
-	pg_query_params($db, $query, $params);
+	$query = 'insert into community_lu (name) values ("$1")';
+	$res = pg_query_params($db, $query, array($name));
 	//echo "</body>\n";
+	if ($res == FALSE)
+		return -1;
 	return 0;
 }
 
