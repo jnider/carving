@@ -53,8 +53,8 @@ case "form_add":
 	break;
 
 case "add":
-	$ret=add($community_name, $alt_name);
-	if ($ret==0)
+	$ret=add($db, $community_name, $alt_name);
+	if (!$ret)
 		echo "Community added ok\n";
 	else
 		echo "Community not added: $ret\n";
