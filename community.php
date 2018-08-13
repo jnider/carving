@@ -33,7 +33,8 @@ echo "<HTML>\n<body>\n";
 
 // connect the database
 //$db = connect_to_db();
-$db = 0;
+	$conn_string = "host=carving.postgres.database.azure.com port=5432 user=dbuser@carving dbname=carving password=Asda67as";
+	$db = pg_connect($conn_string);
 if (!$db)
 {
 	echo "Can't connect to the database\n";
