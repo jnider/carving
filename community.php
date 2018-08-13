@@ -1,6 +1,6 @@
 <?php
 
-//include 'db.php';
+include 'db.php';
 
 // declare the functions
 
@@ -15,7 +15,7 @@ function show_form_add()
 	echo "</form>\n";
 }
 
-function add($name, $alt_name)
+function add($db, $name, $alt_name)
 {
 	//echo "<body>\n";
 	//echo "Adding community $name, $alt_name<BR>\n";
@@ -32,12 +32,12 @@ echo "<HTML>\n<body>\n";
 // make sure we're logged in
 
 // connect the database
-//$db = connect_to_db();
-//if (!$db)
-//{
-//	echo "Can't connect to the database\n";
-//	goto done;
-//}
+$db = connect_to_db();
+if (!$db)
+{
+	echo "Can't connect to the database\n";
+	goto done;
+}
 
 // figure out why the page was loaded
 $action=$_POST['action'];
