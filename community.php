@@ -32,7 +32,8 @@ echo "<HTML>\n<body>\n";
 // make sure we're logged in
 
 // connect the database
-$db = connect_to_db();
+//$db = connect_to_db();
+$db = 0;
 if (!$db)
 {
 	echo "Can't connect to the database\n";
@@ -62,7 +63,7 @@ default:
 	echo "$action is not a valid action\n";
 }
 
-//done:
+done:
 // end output
 echo "</body>\n</HTML>\n";
 
