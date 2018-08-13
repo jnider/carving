@@ -20,7 +20,7 @@ function add($db, $name, $alt_name)
 	//echo "<body>\n";
 	//echo "Adding community $name, $alt_name<BR>\n";
 	$query = 'insert into community_lu (name, alt_name) values ($1, $2)';
-	$res = pg_query_params($db, $query, array($name, $alt_name));
+	$res = pg_query_params($db, "insert into community_lu (name, alt_name) values ('$1', '$2')", array($name, $alt_name));
 	//echo "</body>\n";
 	if ($res == FALSE)
 		return -1;
