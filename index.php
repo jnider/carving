@@ -15,12 +15,12 @@ echo "</form>\n";
 echo "</body>\n";
 }
 
-function login()
+function login($username, $password)
 {
-	if ($user == "joel" && $password == "nider")
+	if ($username == "joel" && $password == "nider")
 	{
 		session_start();
-		$_SESSION['username'] = "joel";
+		$_SESSION['username'] = $username;
 		return 0;
 	}
 	return 1;
