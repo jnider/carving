@@ -13,7 +13,7 @@ echo "<input type=\"hidden\" name=\"action\" value=\"form_add\" />\n";
 echo "<input type=\"submit\" value=\"Add Community\" />\n";
 echo "</form>\n";
 
-if (!isset($_SESSION['username'])
+if (!isset($_SESSION['username']))
 {
 	echo "Not logged in\n";
 }
