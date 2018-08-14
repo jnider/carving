@@ -1,5 +1,10 @@
 <?php
 
+include 'login.php';
+
+if (!logged_in())
+	login();
+
 echo "<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">\n";
 echo "<HTML>\n";
 echo "<head>\n";
