@@ -2,6 +2,12 @@
 
 session_start();
 
+if (!isset($_SESSION['username'])
+{
+	echo "Not logged in\n";
+	exit;
+}
+
 echo "<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">\n";
 echo "<HTML>\n";
 echo "<head>\n";
