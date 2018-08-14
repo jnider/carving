@@ -6,10 +6,11 @@ echo "<head>\n";
 echo "<title>Login</title>\n";
 echo "</head>\n";
 echo "<body>\n";
+echo "Login required<BR>\n";
 echo "<form method=\"post\" action=\"index.php\">\n";
 echo "<input type=\"hidden\" name=\"action\" value=\"login\" />\n";
-echo "<input type=\"text\" name=\"username\" />\n";
-echo "<input type=\"password\" name=\"password\" />\n";
+echo "Username: <input type=\"text\" name=\"username\" /><BR>\n";
+echo "Password: <input type=\"password\" name=\"password\" /><BR>\n";
 echo "<input type=\"submit\" value=\"Login\" />\n";
 echo "</form>\n";
 echo "</body>\n";
@@ -48,15 +49,24 @@ if (!isset($_SESSION['username']))
 }
 else
 {
-echo "<head>\n";
-echo "<title>Actions Menu</title>\n";
-echo "</head>\n";
-echo "<body>\n";
-echo "<form method=\"post\" action=\"community.php\">\n";
-echo "<input type=\"hidden\" name=\"action\" value=\"form_add\" />\n";
-echo "<input type=\"submit\" value=\"Add Community\" />\n";
-echo "</form>\n";
-echo "</body>\n";
+	echo "<head>\n";
+	echo "<title>Actions Menu</title>\n";
+	echo "</head>\n";
+	echo "<body>\n";
+
+	// add community button
+	echo "<form method=\"post\" action=\"community.php\">\n";
+	echo "<input type=\"hidden\" name=\"action\" value=\"form_add\" />\n";
+	echo "<input type=\"submit\" value=\"Add Community\" />\n";
+	echo "</form>\n";
+
+	// 'logout' button
+	echo "<form method=\"post\" action=\"login.php\">\n";
+	echo "<input type=\"hidden\" name=\"action\" value=\"logout\" />\n";
+	echo "<input type=\"submit\" value=\"Logout\" />\n";
+	echo "</form>\n";
+
+	echo "</body>\n";
 }
 
 echo "</HTML>\n";
