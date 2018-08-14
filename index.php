@@ -18,7 +18,11 @@ echo "</body>\n";
 function login()
 {
 	if ($user == "joel" && $password == "nider")
+	{
+		session_start();
+		$_SESSION['username'] = "joel";
 		return 0;
+	}
 	return 1;
 }
 
