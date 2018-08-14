@@ -1,12 +1,6 @@
 <?php
 
-require('login.php');
-
-if (!logged_in())
-{
-	#login();
-	exit;
-}
+session_start();
 
 echo "<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">\n";
 echo "<HTML>\n";
