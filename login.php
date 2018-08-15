@@ -20,9 +20,15 @@ function logged_in()
 	}
 }
 
-function login()
+function login($username, $password)
 {
-	echo "Logging in\n";
+	if ($username == "joel" && $password == "nider")
+	{
+		session_start();
+		$_SESSION['username'] = $username;
+		return 0;
+	}
+	return 1;
 }
 
 function logout()

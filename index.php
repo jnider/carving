@@ -1,5 +1,7 @@
 <?php
 
+include('login.php');
+
 function show_login_form()
 {
 echo "<head>\n";
@@ -14,17 +16,6 @@ echo "Password: <input type=\"password\" name=\"password\" /><BR>\n";
 echo "<input type=\"submit\" value=\"Login\" />\n";
 echo "</form>\n";
 echo "</body>\n";
-}
-
-function login($username, $password)
-{
-	if ($username == "joel" && $password == "nider")
-	{
-		session_start();
-		$_SESSION['username'] = $username;
-		return 0;
-	}
-	return 1;
 }
 
 // check to see if a user is logging in
