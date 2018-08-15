@@ -7,15 +7,16 @@ function show_form_add_user()
 	echo "User Name:<input type=\"text\" name=\"name\"><BR>\n";
 	echo "Password:<input type=\"password\" name=\"pass\"><BR>\n";
 	echo "Confirm Password:<input type=\"password\" name=\"pass2\"><BR>\n";
+	echo "Write Access:<input type=\"checkbox\" name=\"write\" value=\"T\"><BR>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
 }
 
-function add_user($db, $user, $pass)
+function add_user($db, $user, $pass, $write)
 {
 	$hash = password_hash($pass, PASSWORD_DEFAULT);
-	//echo "adding user $user with pass $hash\n";
-	if (!pg_query_params($db, 'insert into users (name, pass) values ($1, $2)', array($user, $hash)))
+	echo "adding user $user with write=$write\n";
+	if (!pg_query_params($db, 'insert into users (name, read, write, pass) values ($1, $2, $3, $4)', array($user, 'T', $write, $hash)))
 		return FALSE;
 	return TRUE;
 }
@@ -59,7 +60,7 @@ if (isset($_POST['action']))
 			$db = connect_to_db();
 			if ($db)
 			{
-				if (!add_user($db, $_POST['name'], $_POST['pass']))
+				if (!add_user($db, $_POST['name'], $_POST['pass'], $_POST['write']))
 					echo "User not added\n";
 			}
 			else
