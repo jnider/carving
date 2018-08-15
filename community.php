@@ -6,7 +6,6 @@ include 'db.php';
 
 function show_form_add()
 {
-	//echo "<head><title>Add community</title></head>\n";
 	echo "<form method=\"post\" action=\"community.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
 	echo "Name:<input type=\"text\" name=\"name\">\n";
