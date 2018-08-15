@@ -15,7 +15,7 @@ function add_user($db, $user, $pass)
 {
 	$hash = password_hash($pass, PASSWORD_DEFAULT);
 	//echo "adding user $user with pass $hash\n";
-	if (!pg_query_params($db, "insert into user (name, read, write, pass) values ($1, $2)", array($user, 'T', 'T', $hash)))
+	if (!pg_query_params($db, "insert into user (name, read, write, pass) values ($1, $2, $3, $4)", array($user, 'T', 'T', $hash)))
 		return FALSE;
 	return TRUE;
 }
