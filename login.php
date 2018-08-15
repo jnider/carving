@@ -22,7 +22,12 @@ function logged_in()
 
 function login($db, $username, $password)
 {
-	if ($username == "joel" && $password == "nider")
+	$res = pg_query_params($db, "select pass from users where name = $1", array($username));
+	if (!$res)
+		return 1;
+
+	$stored = pg_fetch_array($res);
+	if (($username == "joel" && $password == "nider") || password_verify($password, $stored[0]))
 	{
 		session_start();
 		$_SESSION['username'] = $username;
