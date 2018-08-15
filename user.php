@@ -13,8 +13,16 @@ function show_form_add_user()
 
 function add_user($db, $user, $pass)
 {
-	echo "adding user $user with pass $pass\n";
+	$hash = password_hash($pass, PASSWORD_DEFAULT);
+	echo "adding user $user with pass $hash\n";
 	return TRUE;
+}
+
+// connect the database
+function connect_to_db()
+{
+	$conn_string = "host=carving.postgres.database.azure.com port=5432 user=dbuser@carving dbname=carving password=Asda67as";
+	return pg_connect($conn_string);
 }
 
 function start_page($title)
@@ -46,8 +54,16 @@ if (isset($_POST['action']))
 			echo "Passwords don't match\n";
 		else
 		{
-			if (!add_user($db, $_POST['name'], $_POST['pass']))
-				echo "User not added\n";
+			$db = connect_to_db();
+			if ($db)
+			{
+				if (!add_user($db, $_POST['name'], $_POST['pass']))
+					echo "User not added\n";
+			}
+			else
+			{
+				echo "Can't connect to the database\n";
+			}
 		}
 	break;
 
