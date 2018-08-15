@@ -20,7 +20,7 @@ function logged_in()
 	}
 }
 
-function login($username, $password)
+function login($db, $username, $password)
 {
 	if ($username == "joel" && $password == "nider")
 	{

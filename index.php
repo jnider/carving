@@ -1,5 +1,6 @@
 <?php
 
+include('db.php');
 include('login.php');
 
 function show_login_form()
@@ -23,11 +24,18 @@ if (isset($_POST['action']))
 {
 	if ($_POST['action'] == "login")
 	{
-		$ret = login($_POST['username'], $_POST['password']);
-		if ($ret)
-			echo "Error logging in\n";
+		$db = connect_to_db();
+		if ($db)
+		{
+			if (login($db, $_POST['username'], $_POST['password']))
+				echo "Error logging in\n";
+			else
+				header('Location: index.php');
+		}
 		else
-			header('Location: index.php');
+		{
+			echo "Can't connect to db\n";
+		}
 	}
 }
 

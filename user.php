@@ -1,5 +1,7 @@
 <?php
 
+include('db.php');
+
 function show_form_add_user()
 {
 	echo "<form method=\"post\" action=\"user.php\">\n";
@@ -19,13 +21,6 @@ function add_user($db, $user, $pass, $write)
 	if (!pg_query_params($db, 'insert into users (name, read, write, pass) values ($1, $2, $3, $4)', array($user, 'T', $write, $hash)))
 		return FALSE;
 	return TRUE;
-}
-
-// connect the database
-function connect_to_db()
-{
-	$conn_string = "host=carving.postgres.database.azure.com port=5432 user=dbuser@carving dbname=carving password=Asda67as";
-	return pg_connect($conn_string);
 }
 
 function start_page($title)
