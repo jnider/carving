@@ -87,7 +87,8 @@ if (isset($_POST['action']))
 
 	case 'logout':
 		logout();
-		header('Location: login.php');
+		//header('Location: login.php');
+		is_logged_in();
 		break;
 	}
 }
@@ -103,7 +104,6 @@ function is_logged_in()
 	}
 	else
 	{
-		echo "Nobody is logged in\n";
 		start_page("Login");
 		show_login_form();
 		end_page();
