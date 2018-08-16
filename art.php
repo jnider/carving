@@ -17,7 +17,23 @@ function show_form_add_art($db)
 	echo "<form method=\"post\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
 	echo "<table>\n";
-	echo "<tr><td>Type:<td><input type=\"text\" name=\"art_type\"></tr>\n";
+
+	// get list of art types
+	$res = pg_query($db, 'select * from art_type');
+	if (!$res)
+	{
+		echo "Error building art type list";
+		return FALSE;
+	}
+	echo "<tr><td>Art Type:<td><select name=\"art_type\">";
+	while ($art_type = pg_fetch_assoc($res))
+	{
+		$id = $art_type['id'];
+		$type = $art_type['type'];
+		echo "<option value=\"$id\">$type\n";
+	}
+	echo "</select></tr>\n";
+
 	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\"></tr>\n";
 	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\"></tr>\n";
 
