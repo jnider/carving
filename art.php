@@ -2,6 +2,7 @@
 
 include('login.php');
 include('db.php');
+include('menu.php');
 
 /*
 book_id        | integer          |           |          |
