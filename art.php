@@ -90,7 +90,7 @@ function show_art($db)
 function art_looks_ok($db, $item)
 {
 	echo "<table>\n";
-	echo "<tr><td>art_type<td>$item['art_type']</tr>\n";
+	echo "<tr><td>art_type<td>${item['art_type']}</tr>\n";
 	echo "</table>\n";
 	return TRUE;
 }
