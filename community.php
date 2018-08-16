@@ -2,6 +2,7 @@
 
 include('login.php');
 include('db.php');
+include('menu.php');
 
 // declare the functions
 
@@ -28,6 +29,7 @@ function add($db, $name, $alt_name)
 
 // start output
 start_page("Communities");
+menu();
 
 // connect the database
 $db = connect_to_db();
