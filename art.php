@@ -6,7 +6,6 @@ include('menu.php');
 
 /*
  region         | integer          |           |          |
- reg_tag        | text             |           |          |
 */
 
 function show_form_add_art($db)
@@ -65,9 +64,11 @@ function show_form_add_art($db)
 	echo "</table>\n";
 
 	echo "<h2>Price</h2>\n";
+	echo "<table>\n";
 	echo "<tr><td>Purchase Price<td><input type=\"text\" name=\"purchase_price\"><td>Year<input type=\"week\" name=\"purchase_date\"></tr>\n";
-	echo "<tr><td>Appraisal Price<td><input type=\"text\" name=\"appraisal\"><td>Year<input type=\"text\" name=\"appraisal_year\"></tr>\n";
+	echo "<tr><td>Appraisal Price<td><input type=\"text\" name=\"appraisal\"><td>Year<input type=\"week\" name=\"appraisal_year\"></tr>\n";
 	echo "<tr><td>Current Price<td><input type=\"text\" name=\"current_price\"></tr>\n";
+	echo "</table>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
 }
