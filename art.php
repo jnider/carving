@@ -86,6 +86,20 @@ function show_art($db)
 	echo "</div>\n";
 }
 
+// use this to validate the input before inserting into the db
+function art_looks_ok($db, $item)
+{
+	echo "<table>\n";
+	echo "<tr><td>art_type<td>$item['art_type']</tr>\n";
+	echo "</table>\n";
+	return TRUE;
+}
+
+function add_art($db, $item)
+{
+	echo "You are adding a new art item\n";
+}
+
 // start output
 start_page("User Management");
 menu();
@@ -105,15 +119,15 @@ if (isset($_POST['action']))
 		break;
 
 	case "add":
+		if ($db)
 		{
-			if ($db)
-			{
-				echo "You are adding a new art item\n";
-			}
-			else
-			{
-				echo "Can't connect to the database\n";
-			}
+			$item['art_type'] = $_POST['art_type'];
+			if (art_looks_ok($db, $item))
+				add_art($db, $item);
+		}
+		else
+		{
+			echo "Can't connect to the database\n";
 		}
 		break;
 
