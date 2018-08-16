@@ -10,3 +10,12 @@ div.menu {
     margin: 0; 
     background-color: #A0A0D0;
 }
+
+div.left {
+	float: left;
+}
+
+div.right {
+	float: right;
+}
+
