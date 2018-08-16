@@ -4,20 +4,15 @@
 // users are authenticated against the local database so
 // all credentials are kept during snapshots.
 
-function logged_in()
+function show_login_form()
 {
-	session_start();
-	if (isset($_SESSION['username']))
-	{
-		$username = $_SESSION['username'];
-		echo "$username is logged in\n";
-		return TRUE;
-	}
-	else
-	{
-		echo "Nobody is logged in\n";
-		return FALSE;
-	}
+	echo "Enter your username and password<BR>\n";
+	echo "<form method=\"post\">\n";
+	echo "<input type=\"hidden\" name=\"action\" value=\"login\" />\n";
+	echo "Username: <input type=\"text\" name=\"username\" /><BR>\n";
+	echo "Password: <input type=\"password\" name=\"password\" /><BR>\n";
+	echo "<input type=\"submit\" value=\"Login\" />\n";
+	echo "</form>\n";
 }
 
 function login($db, $username, $password)
@@ -54,17 +49,6 @@ function logout()
 	session_destroy();
 }
 
-if (isset($_POST['action']))
-{
-	switch($_POST['action'])
-	{
-	case 'logout':
-		logout();
-		header('Location: index.php');
-		break;
-	}
-}
-
 function start_page($title)
 {
 	echo "<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">\n";
@@ -79,6 +63,52 @@ function start_page($title)
 function stop_page()
 {
 	echo "</body>\n</HTML>\n";
+}
+
+// figure out what we are supposed to do
+if (isset($_POST['action']))
+{
+	switch($_POST['action'])
+	{
+	case "login":
+		$db = connect_to_db();
+		if ($db)
+		{
+			if (login($db, $_POST['username'], $_POST['password']))
+				echo "Error logging in\n";
+			else
+				header('Location: index.php');
+		}
+		else
+		{
+			echo "Can't connect to db\n";
+		}
+		break;
+
+	case 'logout':
+		logout();
+		header('Location: login.php');
+		break;
+	}
+}
+
+function is_logged_in()
+{
+	session_start();
+	if (isset($_SESSION['username']))
+	{
+		$username = $_SESSION['username'];
+		echo "$username is logged in\n";
+		return TRUE;
+	}
+	else
+	{
+		echo "Nobody is logged in\n";
+		start_page("Login");
+		show_login_form();
+		end_page();
+		return FALSE;
+	}
 }
 
 ?>

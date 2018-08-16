@@ -3,43 +3,8 @@
 include('db.php');
 include('login.php');
 
-function show_login_form()
-{
-echo "Login required<BR>\n";
-echo "<form method=\"post\" action=\"index.php\">\n";
-echo "<input type=\"hidden\" name=\"action\" value=\"login\" />\n";
-echo "Username: <input type=\"text\" name=\"username\" /><BR>\n";
-echo "Password: <input type=\"password\" name=\"password\" /><BR>\n";
-echo "<input type=\"submit\" value=\"Login\" />\n";
-echo "</form>\n";
-}
-
-// check to see if a user is logging in
-if (isset($_POST['action']))
-{
-	if ($_POST['action'] == "login")
-	{
-		$db = connect_to_db();
-		if ($db)
-		{
-			if (login($db, $_POST['username'], $_POST['password']))
-				echo "Error logging in\n";
-			else
-				header('Location: index.php');
-		}
-		else
-		{
-			echo "Can't connect to db\n";
-		}
-	}
-}
-
-if (!isset($_SESSION['username']))
-{
-	start_page("Login");
-	show_login_form();
-}
-else
+// check to see if a user is logged in
+if (is_logged_in())
 {
 	start_page("Actions");
 
