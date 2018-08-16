@@ -91,6 +91,15 @@ function art_looks_ok($db, $item)
 {
 	echo "<table>\n";
 	echo "<tr><td>art_type<td>${item['art_type']}</tr>\n";
+	echo "<tr><td>material<td>${item['material']}</tr>\n";
+	echo "<tr><td>artist<td>${item['artist']}</tr>\n";
+	echo "<tr><td>community<td>${item['community']}</tr>\n";
+	echo "<tr><td>book_id<td>${item['book_id']}</tr>\n";
+	echo "<tr><td>reg_tag<td>${item['reg_tag']}</tr>\n";
+	echo "<tr><td>description<td>${item['description']}</tr>\n";
+	echo "<tr><td>height<td>${item['height']}</tr>\n";
+	echo "<tr><td>width<td>${item['width']}</tr>\n";
+	echo "<tr><td>depth<td>${item['depth']}</tr>\n";
 	echo "</table>\n";
 	return TRUE;
 }
@@ -122,6 +131,15 @@ if (isset($_POST['action']))
 		if ($db)
 		{
 			$item['art_type'] = $_POST['art_type'];
+			$item['material'] = $_POST['material'];
+			$item['artist'] = $_POST['artist'];
+			$item['community'] = $_POST['community'];
+			$item['book_id'] = $_POST['book_id'];
+			$item['reg_tag'] = $_POST['reg_tag'];
+			$item['description'] = $_POST['description'];
+			$item['height'] = $_POST['height'];
+			$item['width'] = $_POST['width'];
+			$item['depth'] = $_POST['depth'];
 			if (art_looks_ok($db, $item))
 				add_art($db, $item);
 		}
