@@ -6,15 +6,16 @@ include('menu.php');
 
 function show_form_add_user()
 {
+	echo "<h1>Add a new user account</h1>\n";
 	echo "<form method=\"post\" action=\"user.php\">\n";
-	echo "<table>\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
+	echo "<table>\n";
 	echo "<tr><td>User Name:<td><input type=\"text\" name=\"name\"></tr>\n";
 	echo "<tr><td>Password:<td><input type=\"password\" name=\"pass\"></tr>\n";
 	echo "<tr><td>Confirm Password:<td><input type=\"password\" name=\"pass2\"></tr>\n";
 	echo "<tr><td>Write Access:<td><input type=\"checkbox\" name=\"write\" value=\"T\"></tr>\n";
-	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</table>\n";
+	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
 }
 
