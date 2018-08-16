@@ -67,6 +67,7 @@ if (isset($_POST['action']))
 
 function start_page($title)
 {
+	echo "<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">\n";
 	echo "<HTML>\n";
 	echo "<head>\n";
 	echo "<title>$title</title>\n";
