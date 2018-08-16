@@ -2,29 +2,14 @@
 
 include('db.php');
 include('login.php');
+include('menu.php');
 
 // check to see if a user is logged in
 if (is_logged_in())
 {
 	start_page("Actions");
-
-	// 'add community' button
-	echo "<form method=\"post\" action=\"community.php\">\n";
-	echo "<input type=\"hidden\" name=\"action\" value=\"form_add\" />\n";
-	echo "<input type=\"submit\" value=\"Add Community\" />\n";
-	echo "</form>\n";
-
-	// 'add user' button
-	echo "<form method=\"post\" action=\"user.php\">\n";
-	echo "<input type=\"hidden\" name=\"action\" value=\"form_add\" />\n";
-	echo "<input type=\"submit\" value=\"Add User\" />\n";
-	echo "</form>\n";
-
-	// 'logout' button
-	echo "<form method=\"post\" action=\"login.php\">\n";
-	echo "<input type=\"hidden\" name=\"action\" value=\"logout\" />\n";
-	echo "<input type=\"submit\" value=\"Logout\" />\n";
-	echo "</form>\n";
+	menu();
+	echo "Content";
 }
 
 end_page();
