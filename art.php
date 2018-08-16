@@ -22,7 +22,6 @@ book_id        | integer          |           |          |
 
 function show_form_add_art($db)
 {
-
 	// now output the form
 	echo "<form method=\"post\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
@@ -39,7 +38,11 @@ function show_form_add_art($db)
 	}
 	echo "Community:<select name=\"community\">";
 	while ($community = pg_fetch_assoc($res))
-		echo "<option value=\"$community['id']\">$community['name']\n";
+	{
+		$id = $community['id'];
+		$name = $community['name'];
+		echo "<option value=\"$id\">$name\n";
+	}
 	echo "</select>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
