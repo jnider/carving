@@ -108,6 +108,7 @@ if (isset($_POST['action']))
 		{
 			if ($db)
 			{
+				echo "You are adding a new art item\n";
 			}
 			else
 			{
