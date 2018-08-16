@@ -1,5 +1,6 @@
 <?php
 
+include('login.php');
 include('db.php');
 
 function show_form_add_user()
@@ -21,18 +22,6 @@ function add_user($db, $user, $pass, $write)
 	if (!pg_query_params($db, 'insert into users (name, read, write, pass) values ($1, $2, $3, $4)', array($user, 'T', $write, $hash)))
 		return FALSE;
 	return TRUE;
-}
-
-function start_page($title)
-{
-	echo "<HTML>\n";
-	//echo "<head><title>Add community</title></head>\n";
-	echo "<body>\n";
-}
-
-function stop_page()
-{
-	echo "</body>\n</HTML>\n";
 }
 
 // start output

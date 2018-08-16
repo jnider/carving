@@ -65,4 +65,19 @@ if (isset($_POST['action']))
 	}
 }
 
+function start_page($title)
+{
+	echo "<HTML>\n";
+	echo "<head>\n";
+	echo "<title>$title</title>\n";
+	echo "<link rel=\"stylesheet\" href=\"styles.css\">\n";
+	echo "</head>\n";
+	echo "<body>\n";
+}
+
+function stop_page()
+{
+	echo "</body>\n</HTML>\n";
+}
+
 ?>
