@@ -4,7 +4,13 @@ function menu()
 {
 	echo "<div class='menu'>";
 
-	// 'add community' button
+	// 'show art' button
+	echo "<form method=\"post\" action=\"art.php\">\n";
+	echo "<input type=\"hidden\" name=\"action\" value=\"show\" />\n";
+	echo "<input type=\"submit\" value=\"Browse Art Items\" />\n";
+	echo "</form>\n";
+
+	// 'add art' button
 	echo "<form method=\"post\" action=\"art.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"form_add\" />\n";
 	echo "<input type=\"submit\" value=\"Add Art Item\" />\n";

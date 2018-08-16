@@ -49,6 +49,19 @@ function show_form_add_art($db)
 	echo "</form>\n";
 }
 
+function show_art($db)
+{
+	echo "<div class=\"left\">\n";
+	echo "AA\n";
+	echo "</div>\n";
+
+	echo "Some text\n";
+
+	echo "<div class=\"right\">\n";
+	echo "AA\n";
+	echo "</div>\n";
+}
+
 // start output
 start_page("User Management");
 menu();
@@ -60,6 +73,7 @@ if (isset($_POST['action']))
 	switch($_POST['action'])
 	{	
 	case "show":
+		show_art($db);
 		break;
 
 	case "form_add":
