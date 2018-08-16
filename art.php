@@ -31,7 +31,7 @@ function show_form_add_art($db)
 	echo "Description:<input type=\"text\" name=\"description\"><BR>\n";
 
 	// get list of communitites
-	$res = pg_query($db, 'select * from community_lu'))
+	$res = pg_query($db, 'select * from community_lu');
 	if (!$res)
 	{
 		echo "Error building community list";
