@@ -5,13 +5,7 @@ include('db.php');
 include('menu.php');
 
 /*
- art_type       | integer          |           |          |
  region         | integer          |           |          |
- purchase_price | double precision |           |          |
- appraisal      | double precision |           |          |
- current_price  | double precision |           |          |
- purchase_year  | integer          |           |          |
- appraisal_year | integer          |           |          |
  reg_tag        | text             |           |          |
 */
 
@@ -23,9 +17,9 @@ function show_form_add_art($db)
 	echo "<form method=\"post\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
 	echo "<table>\n";
+	echo "<tr><td>Type:<td><input type=\"text\" name=\"art_type\"></tr>\n";
 	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\"></tr>\n";
 	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\"></tr>\n";
-	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\"></tr>\n";
 
 	// get list of communitites
 	$res = pg_query($db, 'select * from community_lu');
@@ -43,13 +37,21 @@ function show_form_add_art($db)
 	}
 	echo "</select></tr>\n";
 	echo "<tr><td>Book ID:<td><input type=\"text\" name=\"book_id\"></tr>\n";
+	echo "<tr><td>Original Tag ID:<td><input type=\"text\" name=\"reg_tag\"></tr>\n";
+	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\"></tr>\n";
 	echo "</table>\n";
+
 	echo "<h2>Dimensions</h2>\n";
 	echo "<table>\n";
-	echo "<tr><td>Height:<td><input type=\"text\" name=\"height\"></tr>\n";
-	echo "<tr><td>Width:<td><input type=\"text\" name=\"width\"></tr>\n";
-	echo "<tr><td>Depth:<td><input type=\"text\" name=\"depth\"></tr>\n";
+	echo "<tr><td>Height:<td><input type=\"text\" name=\"height\"> cm</tr>\n";
+	echo "<tr><td>Width:<td><input type=\"text\" name=\"width\"> cm</tr>\n";
+	echo "<tr><td>Depth:<td><input type=\"text\" name=\"depth\"> cm</tr>\n";
 	echo "</table>\n";
+
+	echo "<h2>Price</h2>\n";
+	echo "<tr><td>Purchase Price<td><input type=\"text\" name=\"purchase_price\"><td>Year<input type=\"week\" name=\"purchase_date\"></tr>\n";
+	echo "<tr><td>Appraisal Price<td><input type=\"text\" name=\"appraisal\"><td>Year<input type=\"text\" name=\"appraisal_year\"></tr>\n";
+	echo "<tr><td>Current Price<td><input type=\"text\" name=\"current_price\"></tr>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
 }
