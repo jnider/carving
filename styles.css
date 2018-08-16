@@ -1,12 +1,12 @@
 body {
-    background-color: #3030D0;
+    background-color: #A8A8D0;
 }
 
 div.menu {
 	float: left;
-    width: 220px;
+    width: 180px;
     padding: 2px;
-    border: 5px solid gray;
+    border: 4px solid gray;
     margin: 0; 
     background-color: #A0A0D0;
 }
