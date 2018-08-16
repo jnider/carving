@@ -5,30 +5,27 @@ include('db.php');
 include('menu.php');
 
 /*
-book_id        | integer          |           |          |
  art_type       | integer          |           |          |
- community      | integer          |           |          |
  region         | integer          |           |          |
- height         | double precision |           |          |
- width          | double precision |           |          |
- depth          | double precision |           |          |
  purchase_price | double precision |           |          |
  appraisal      | double precision |           |          |
  current_price  | double precision |           |          |
  purchase_year  | integer          |           |          |
  appraisal_year | integer          |           |          |
- id             | integer          |           | not null | nextval('art_id_seq'::regclass)
  reg_tag        | text             |           |          |
 */
 
 function show_form_add_art($db)
 {
+	echo "<h1>Add Art Item</h1>\n";
+
 	// now output the form
 	echo "<form method=\"post\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
-	echo "Material:<input type=\"text\" name=\"material\"><BR>\n";
-	echo "Artist:<input type=\"text\" name=\"artist\"><BR>\n";
-	echo "Description:<input type=\"text\" name=\"description\"><BR>\n";
+	echo "<table>\n";
+	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\"></tr>\n";
+	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\"></tr>\n";
+	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\"></tr>\n";
 
 	// get list of communitites
 	$res = pg_query($db, 'select * from community_lu');
@@ -37,14 +34,22 @@ function show_form_add_art($db)
 		echo "Error building community list";
 		return FALSE;
 	}
-	echo "Community:<select name=\"community\">";
+	echo "<tr><td>Community:<td><select name=\"community\">";
 	while ($community = pg_fetch_assoc($res))
 	{
 		$id = $community['id'];
 		$name = $community['name'];
 		echo "<option value=\"$id\">$name\n";
 	}
-	echo "</select>\n";
+	echo "</select></tr>\n";
+	echo "<tr><td>Book ID:<td><input type=\"text\" name=\"book_id\"></tr>\n";
+	echo "</table>\n";
+	echo "<h2>Dimensions</h2>\n";
+	echo "<table>\n";
+	echo "<tr><td>Height:<td><input type=\"text\" name=\"height\"></tr>\n";
+	echo "<tr><td>Width:<td><input type=\"text\" name=\"width\"></tr>\n";
+	echo "<tr><td>Depth:<td><input type=\"text\" name=\"depth\"></tr>\n";
+	echo "</table>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
 }
