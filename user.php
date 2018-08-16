@@ -2,6 +2,7 @@
 
 include('login.php');
 include('db.php');
+include('menu.php');
 
 function show_form_add_user()
 {
@@ -26,6 +27,7 @@ function add_user($db, $user, $pass, $write)
 
 // start output
 start_page("User Management");
+menu();
 
 // figure out why the page was loaded
 if (isset($_POST['action']))
