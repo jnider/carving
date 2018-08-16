@@ -52,13 +52,13 @@ function show_form_add_art($db)
 function show_art($db)
 {
 	echo "<div class=\"left\">\n";
-	echo "<img src=\"images\\arrow-left.png\">\n";
+	echo "<img src=\"images/arrow-left.png\">\n";
 	echo "</div>\n";
 
 	echo "Some text\n";
 
 	echo "<div class=\"right\">\n";
-	echo "<img src=\"images\\arrow-right.png\">\n";
+	echo "<img src=\"images/arrow-right.png\">\n";
 	echo "</div>\n";
 }
 
