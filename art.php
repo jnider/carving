@@ -81,7 +81,7 @@ function show_art($db, $id)
 	echo "<img src=\"images/left-arrow.png\" width=50%>\n";
 	echo "</div>\n";
 
-	$res = pg_query($db, 'select * from art where id = $id');
+	$res = pg_query($db, "select * from art where id = '$id'");
 	if (!$res)
 	{
 		$err = pg_last_error($db);
@@ -144,7 +144,7 @@ function add_art($db, $item)
 }
 
 // start output
-start_page("User Management");
+start_page("Carving Details");
 menu();
 
 // figure out why the page was loaded
