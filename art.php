@@ -92,11 +92,11 @@ function show_art($db)
 function art_looks_ok($db, $item)
 {
 	echo "<table>\n";
-	echo "<tr><td>art_type<td>${item['art_type']}</tr>\n";
-	echo "<tr><td>material<td>${item['material']}</tr>\n";
-	echo "<tr><td>artist<td>${item['artist']}</tr>\n";
-	echo "<tr><td>community<td>${item['community']}</tr>\n";
-	echo "<tr><td>book_id<td>${item['book_id']}</tr>\n";
+	//echo "<tr><td>art_type<td>${item['art_type']}</tr>\n";
+	//echo "<tr><td>material<td>${item['material']}</tr>\n";
+	//echo "<tr><td>artist<td>${item['artist']}</tr>\n";
+	//echo "<tr><td>community<td>${item['community']}</tr>\n";
+	//echo "<tr><td>book_id<td>${item['book_id']}</tr>\n";
 	echo "<tr><td>reg_tag<td>${item['reg_tag']}</tr>\n";
 	echo "<tr><td>description<td>${item['description']}</tr>\n";
 	echo "<tr><td>height<td>${item['height']}</tr>\n";
@@ -113,12 +113,19 @@ function art_looks_ok($db, $item)
 
 function add_art($db, $item)
 {
+/*
 	return pg_query($db, "insert into art (art_type, material, artist, community, book_id, reg_tag, /
 		description, height, width, depth, purchase_price, purchase_year, appraisal, appraisal_year, current_price) /
 		values (\"${item['art_type']}\", \"${item['material']}\", \"${item['artist']}\", \"${item['community']}\", /
 		\"${item['book_id']}\", \"${item['reg_tag']}\", \"${item['description']}\", \"${item['height']}\", \"${item['width']}\", /
 		\"${item['depth']}\", \"${item['purchase_price']}\", \"${item['purchase_year']}\", \"${item['appraisal']}\", /
 		\"${item['appraisal_year']}\", \"${item['current_price']}\")");
+*/
+	$art_type = $item['art_type'];
+	$material = $item['material'];
+	$artist = $item['artist'];
+	$community = $item['community'];
+	return pg_query($db, "insert int art (art_type, material, artist, community) values ('$art_type','$material','$artist','$community')");
 }
 
 // start output
