@@ -125,7 +125,8 @@ function add_art($db, $item)
 	$material = $item['material'];
 	$artist = $item['artist'];
 	$community = $item['community'];
-	return pg_query($db, "insert int art (art_type, material, artist, community) values ('$art_type','$material','$artist','$community')");
+	$values = array($art_type, $material, $artist, $community);
+	return pg_query_params($db, "insert int art (art_type, material, artist, community) values ($1, $2, $3, $4)", $values);
 }
 
 // start output
@@ -166,9 +167,11 @@ if (isset($_POST['action']))
 			$item['current_price'] = $_POST['current_price'];
 			if (art_looks_ok($db, $item))
 			{
-				if (!add_art($db, $item))
+				$res = add_art($db, $item);
+				if (!$res)
 				{
-					echo "Something went wrong\n";
+					$err = pg_last_error($db);
+					echo "Something went wrong: $err\n";
 					show_form_add_art($db, $item);
 				}
 				else
