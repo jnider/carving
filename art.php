@@ -33,7 +33,7 @@ function show_form_add_art($db, $item)
 	}
 	echo "</select></tr>\n";
 
-	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\"></tr>\n";
+	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\" value=\"${item['material']}\"></tr>\n";
 	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\"></tr>\n";
 
 	// get list of communitites
@@ -113,7 +113,7 @@ function art_looks_ok($db, $item)
 
 function add_art($db, $item)
 {
-	$res = pg
+	//$res = pg
 	echo "You are adding a new art item\n";
 }
 
@@ -164,8 +164,8 @@ if (isset($_POST['action']))
 		}
 		break;
 
-default:
-	echo "$action is not a valid action\n";
+	default:
+		echo "$action is not a valid action\n";
 	}
 }
 
