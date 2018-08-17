@@ -8,7 +8,7 @@ include('menu.php');
  region         | integer          |           |          |
 */
 
-function show_form_add_art($db)
+function show_form_add_art($db, $item)
 {
 	echo "<h1>Add Art Item</h1>\n";
 
@@ -33,8 +33,8 @@ function show_form_add_art($db)
 	}
 	echo "</select></tr>\n";
 
-	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\"></tr>\n";
-	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\"></tr>\n";
+	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\" value=\"${item['material']}\"></tr>\n";
+	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\" value=\"${item['artist']}\"></tr>\n";
 
 	// get list of communitites
 	$res = pg_query($db, 'select * from community_lu');
@@ -51,23 +51,25 @@ function show_form_add_art($db)
 		echo "<option value=\"$id\">$name\n";
 	}
 	echo "</select></tr>\n";
-	echo "<tr><td>Book ID:<td><input type=\"text\" name=\"book_id\"></tr>\n";
-	echo "<tr><td>Original Tag ID:<td><input type=\"text\" name=\"reg_tag\"></tr>\n";
-	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\"></tr>\n";
+	echo "<tr><td>Book ID:<td><input type=\"text\" name=\"book_id\" value=\"${item['book_id']}\"></tr>\n";
+	echo "<tr><td>Original Tag ID:<td><input type=\"text\" name=\"reg_tag\" value=\"${item['reg_tag']}\"></tr>\n";
+	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\" value=\"${item['description']}\"></tr>\n";
 	echo "</table>\n";
 
 	echo "<h2>Dimensions</h2>\n";
 	echo "<table>\n";
-	echo "<tr><td>Height:<td><input type=\"text\" name=\"height\"> cm</tr>\n";
-	echo "<tr><td>Width:<td><input type=\"text\" name=\"width\"> cm</tr>\n";
-	echo "<tr><td>Depth:<td><input type=\"text\" name=\"depth\"> cm</tr>\n";
+	echo "<tr><td>Height:<td><input type=\"text\" name=\"height\" value=\"${item['height']}\"> cm</tr>\n";
+	echo "<tr><td>Width:<td><input type=\"text\" name=\"width\" value=\"${item['width']}\"> cm</tr>\n";
+	echo "<tr><td>Depth:<td><input type=\"text\" name=\"depth\" value=\"${item['depth']}\"> cm</tr>\n";
 	echo "</table>\n";
 
 	echo "<h2>Price</h2>\n";
 	echo "<table>\n";
-	echo "<tr><td>Purchase Price<td><input type=\"text\" name=\"purchase_price\"><td>Year<input type=\"week\" name=\"purchase_date\"></tr>\n";
-	echo "<tr><td>Appraisal Price<td><input type=\"text\" name=\"appraisal\"><td>Year<input type=\"week\" name=\"appraisal_year\"></tr>\n";
-	echo "<tr><td>Current Price<td><input type=\"text\" name=\"current_price\"></tr>\n";
+	echo "<tr><td>Purchase Price<td><input type=\"text\" name=\"purchase_price\" value=\"${item['purchase_price']}\">";
+	echo"<td>Year<input type=\"week\" name=\"purchase_year\" value=\"${item['purchase_year']}\"></tr>\n";
+	echo "<tr><td>Appraisal Price<td><input type=\"text\" name=\"appraisal\" value=\"${item['appraisal']}\">";
+	echo "<td>Year<input type=\"week\" name=\"appraisal_year\" value=\"${item['appraisal_year']}\"></tr>\n";
+	echo "<tr><td>Current Price<td><input type=\"text\" name=\"current_price\" value=\"${item['current_price']}\"></tr>\n";
 	echo "</table>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
@@ -100,12 +102,18 @@ function art_looks_ok($db, $item)
 	echo "<tr><td>height<td>${item['height']}</tr>\n";
 	echo "<tr><td>width<td>${item['width']}</tr>\n";
 	echo "<tr><td>depth<td>${item['depth']}</tr>\n";
+	echo "<tr><td>purchase_price<td>${item['purchase_price']}</tr>\n";
+	echo "<tr><td>purchase_year<td>${item['purchase_year']}</tr>\n";
+	echo "<tr><td>appraisal<td>${item['appraisal']}</tr>\n";
+	echo "<tr><td>appraisal_year<td>${item['appraisal_year']}</tr>\n";
+	echo "<tr><td>current_price<td>${item['current_price']}</tr>\n";
 	echo "</table>\n";
 	return TRUE;
 }
 
 function add_art($db, $item)
 {
+	$res = pg
 	echo "You are adding a new art item\n";
 }
 
@@ -140,8 +148,15 @@ if (isset($_POST['action']))
 			$item['height'] = $_POST['height'];
 			$item['width'] = $_POST['width'];
 			$item['depth'] = $_POST['depth'];
+			$item['purchase_price'] = $_POST['purchase_price'];
+			$item['purchase_year'] = $_POST['purchase_year'];
+			$item['appraisal'] = $_POST['appraisal'];
+			$item['appraisal_year'] = $_POST['appraisal_year'];
+			$item['current_price'] = $_POST['current_price'];
 			if (art_looks_ok($db, $item))
 				add_art($db, $item);
+			else
+				show_form_add_art($db, $item);
 		}
 		else
 		{
