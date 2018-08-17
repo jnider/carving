@@ -81,6 +81,7 @@ function show_art($db, $id)
 	echo "<img src=\"images/left-arrow.png\" width=50%>\n";
 	echo "</div>\n";
 
+	echo "<div class=\"center\">\n";
 	$res = pg_query($db, "select * from art where id = '$id'");
 	if (!$res)
 	{
@@ -96,6 +97,7 @@ function show_art($db, $id)
 	echo "<tr><td>Community<td>${item['community']}</tr>\n";
 	echo "</table>\n";
 	echo "Description: ${item['description']}\n";
+	echo "</div>\n";
 
 	echo "<div class=\"right\">\n";
 	echo "<img src=\"images/right-arrow.png\" width=50%>\n";
