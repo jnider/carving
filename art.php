@@ -34,7 +34,7 @@ function show_form_add_art($db, $item)
 	echo "</select></tr>\n";
 
 	echo "<tr><td>Material:<td><input type=\"text\" name=\"material\" value=\"${item['material']}\"></tr>\n";
-	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\"></tr>\n";
+	echo "<tr><td>Artist:<td><input type=\"text\" name=\"artist\" value=\"${item['artist']}\"></tr>\n";
 
 	// get list of communitites
 	$res = pg_query($db, 'select * from community_lu');
@@ -51,9 +51,9 @@ function show_form_add_art($db, $item)
 		echo "<option value=\"$id\">$name\n";
 	}
 	echo "</select></tr>\n";
-	echo "<tr><td>Book ID:<td><input type=\"text\" name=\"book_id\"></tr>\n";
-	echo "<tr><td>Original Tag ID:<td><input type=\"text\" name=\"reg_tag\"></tr>\n";
-	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\"></tr>\n";
+	echo "<tr><td>Book ID:<td><input type=\"text\" name=\"book_id\" value=\"${item['book_id']}\"></tr>\n";
+	echo "<tr><td>Original Tag ID:<td><input type=\"text\" name=\"reg_tag\" value=\"${item['reg_tag']}\"></tr>\n";
+	echo "<tr><td>Description:<td><input type=\"text\" name=\"description\" value=\"${item['description']}\"></tr>\n";
 	echo "</table>\n";
 
 	echo "<h2>Dimensions</h2>\n";
@@ -113,15 +113,12 @@ function art_looks_ok($db, $item)
 
 function add_art($db, $item)
 {
-	if (!pg_query($db, "insert into art (art_type, material, artist, community, book_id, reg_tag, /
+	return pg_query($db, "insert into art (art_type, material, artist, community, book_id, reg_tag, /
 		description, height, width, depth, purchase_price, purchase_year, appraisal, appraisal_year, current_price) /
-		values (${item['art_type']}, ${item['material']}, ${item['artist']}, ${item['community']}, /
-		${item['book_id']}, ${item['reg_tag']}, ${item['description']}, ${item['height']}, ${item['width']}, /
-		${item['depth']}, ${item['purchase_price']}, ${item['purchase_year']}, ${item['appraisal']}, /
-		${item['appraisal_year']}, ${item['current_price']})"))
-		return FALSE;
-	echo "Art item added\n";
-	return TRUE;
+		values (\"${item['art_type']}\", \"${item['material']}\", \"${item['artist']}\", \"${item['community']}\", /
+		\"${item['book_id']}\", \"${item['reg_tag']}\", \"${item['description']}\", \"${item['height']}\", \"${item['width']}\", /
+		\"${item['depth']}\", \"${item['purchase_price']}\", \"${item['purchase_year']}\", \"${item['appraisal']}\", /
+		\"${item['appraisal_year']}\", \"${item['current_price']}\")");
 }
 
 // start output
@@ -161,7 +158,15 @@ if (isset($_POST['action']))
 			$item['appraisal_year'] = $_POST['appraisal_year'];
 			$item['current_price'] = $_POST['current_price'];
 			if (art_looks_ok($db, $item))
-				add_art($db, $item);
+			{
+				if (!add_art($db, $item))
+				{
+					echo "Something went wrong\n";
+					show_form_add_art($db, $item);
+				}
+				else
+					echo "Added ok\n";
+			}
 			else
 				show_form_add_art($db, $item);
 		}
