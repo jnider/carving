@@ -132,7 +132,7 @@ if (isset($_POST['action']))
 		break;
 
 	case "form_add":
-		show_form_add_art($db);
+		show_form_add_art($db, $item);
 		break;
 
 	case "add":
