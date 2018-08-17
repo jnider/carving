@@ -84,7 +84,8 @@ function show_art($db, $id)
 	$res = pg_query($db, 'select * from art where id = $id');
 	if (!$res)
 	{
-		echo "Error building art type list";
+		$err = pg_last_error($db);
+		echo "Error retrieving art id=$id: $err";
 		return FALSE;
 	}
 	$item = pg_fetch_assoc($res);
