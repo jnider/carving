@@ -126,7 +126,7 @@ function add_art($db, $item)
 	$artist = $item['artist'];
 	$community = $item['community'];
 	$values = array($art_type, $material, $artist, $community);
-	return pg_query_params($db, "insert int art (art_type, material, artist, community) values ($1, $2, $3, $4)", $values);
+	return pg_query_params($db, "insert into art (art_type, material, artist, community) values ($1, $2, $3, $4)", $values);
 }
 
 // start output
