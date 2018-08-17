@@ -113,8 +113,15 @@ function art_looks_ok($db, $item)
 
 function add_art($db, $item)
 {
-	//$res = pg
-	echo "You are adding a new art item\n";
+	if (!pg_query($db, "insert into art (art_type, material, artist, community, book_id, reg_tag, /
+		description, height, width, depth, purchase_price, purchase_year, appraisal, appraisal_year, current_price) /
+		values (${item['art_type']}, ${item['material']}, ${item['artist']}, ${item['community']}, /
+		${item['book_id']}, ${item['reg_tag']}, ${item['description']}, ${item['height']}, ${item['width']}, /
+		${item['depth']}, ${item['purchase_price']}, ${item['purchase_year']}, ${item['appraisal']}, /
+		${item['appraisal_year']}, ${item['current_price']})"))
+		return FALSE;
+	echo "Art item added\n";
+	return TRUE;
 }
 
 // start output
