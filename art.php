@@ -123,8 +123,10 @@ function add_art($db, $item)
 */
 	$values = array($item['art_type'], $item['material'], $item['artist'], $item['community'], $item['book_id'], $item['reg_tag'],
 		$item['description']);
-	return pg_query_params($db, "insert into art (art_type, material, artist, community, book_id, reg_tag, description) /
-		values ($1, $2, $3, $4, $5, $6, $7)", $values);
+	$query = "insert into art (art_type, material, artist, community, book_id, reg_tag, description)" .
+		" values ($1, $2, $3, $4, $5, $6, $7)";
+
+	return pg_query_params($db, $query, $values);
 }
 
 // start output
