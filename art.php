@@ -121,12 +121,9 @@ function add_art($db, $item)
 		\"${item['depth']}\", \"${item['purchase_price']}\", \"${item['purchase_year']}\", \"${item['appraisal']}\", /
 		\"${item['appraisal_year']}\", \"${item['current_price']}\")");
 */
-	$art_type = $item['art_type'];
-	$material = $item['material'];
-	$artist = $item['artist'];
-	$community = $item['community'];
-	$values = array($art_type, $material, $artist, $community);
-	return pg_query_params($db, "insert into art (art_type, material, artist, community) values ($1, $2, $3, $4)", $values);
+	$values = array($item['art_type'], $item['material'], $item['artist'], $item['community'], $item['book_id'], $item['reg_tag'], /
+		$item['description']);
+	return pg_query_params($db, "insert into art (art_type, material, artist, community) values ($1, $2, $3, $4, $5, $6, $7)", $values);
 }
 
 // start output
