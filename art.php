@@ -75,13 +75,26 @@ function show_form_add_art($db, $item)
 	echo "</form>\n";
 }
 
-function show_art($db)
+function show_art($db, $id)
 {
 	echo "<div class=\"left\">\n";
 	echo "<img src=\"images/left-arrow.png\" width=50%>\n";
 	echo "</div>\n";
 
-	echo "Some text\n";
+	$res = pg_query($db, 'select * from art where id = $id');
+	if (!$res)
+	{
+		echo "Error building art type list";
+		return FALSE;
+	}
+	$item = pg_fetch_assoc($res);
+	echo "<table>\n";
+	echo "<tr><td>Type<td>${item['type']}</tr>\n";
+	echo "<tr><td>Artist<td>${item['artist']}</tr>\n";
+	echo "<tr><td>Materials<td>${item['material']}</tr>\n";
+	echo "<tr><td>Community<td>${item['community']}</tr>\n";
+	echo "</table>\n";
+	echo "Description: ${item['description']}\n";
 
 	echo "<div class=\"right\">\n";
 	echo "<img src=\"images/right-arrow.png\" width=50%>\n";
@@ -140,7 +153,7 @@ if (isset($_POST['action']))
 	switch($_POST['action'])
 	{	
 	case "show":
-		show_art($db);
+		show_art($db, $_POST['id']);
 		break;
 
 	case "form_add":
