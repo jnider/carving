@@ -209,9 +209,9 @@ echo <<< HTML
 
 	<h2>Price</h2>
 	<table>
-	<tr><td>Purchase Date<td><input type="week" name="purchase_date"></tr>
+	<tr><td>Purchase Date<td><input type="date" name="purchase_date"></tr>
 	<tr><td>Purchase Price<td><input type="text" name="purchase_price"></tr>
-	<tr><td>Appraisal Date<td><input type="week" name="appraisal_date"></tr>
+	<tr><td>Appraisal Date<td><input type="date" name="appraisal_date"></tr>
 	<tr><td>Appraisal Price<td><input type="text" name="appraisal"></tr>
 	</table>
 	<input type="submit" value="Add">
@@ -313,9 +313,9 @@ function show_form_modify_art($db, $item_id, $group)
 	{
 		echo "<h2>Price</h2>\n";
 		echo "<table>\n";
-		echo "<tr><td>Purchase Date<td><input type=\"month\" name=\"purchase_date\" value=\"${item['purchase_date']}\"></tr>\n";
+		echo "<tr><td>Purchase Date<td><input type=date name=\"purchase_date\" value=\"${item['purchase_date']}\"></tr>\n";
 		echo "<tr><td>Purchase Price<td><input type=\"text\" name=\"purchase_price\" value=\"${item['purchase_price']}\">$</tr>\n";
-		echo "<tr><td>Appraisal Date<td><input type=\"month\" name=\"appraisal_date\" value=\"${item['appraisal_date']}\"></tr>\n";
+		echo "<tr><td>Appraisal Date<td><input type=date name=\"appraisal_date\" value=\"${item['appraisal_date']}\"></tr>\n";
 		echo "<tr><td>Appraisal Price<td><input type=\"text\" name=\"appraisal\" value=\"${item['appraisal']}\">$</tr>\n";
 		echo "</table>\n";
 	}
@@ -442,9 +442,58 @@ function modify_art_item($db, $item_id, $group)
 			$item_id);
 
 		$query = "update art set art_type = $1, artist = $2, community = $3, book_id = $4, reg_tag = $5, material = $6, description = $7 where id = $8";
+		break;
 
-		return pg_query_params($db, $query, $values);
+
+	case "dimensions":
+		// read the variables from the posted form
+		$item['height'] = $_POST['height'];
+		$item['width'] = $_POST['width'];
+		$item['depth'] = $_POST['depth'];
+		$item['pieces'] = $_POST['pieces'];
+		break;
+
+		// build the query
+		$values = array(
+			$item['height'],
+			$item['width'],
+			$item['depth'],
+			$item['pieces'],
+			$item_id);
+
+		$query = "update art set height = $1, width = $2, depth = $3, pieces = $4 where id = $5";
+		break;
+
+	case "price":
+		// read the variables from the posted form
+		$item['purchase_price'] = $_POST['purchase_price'];
+		$item['purchase_date'] = $_POST['purchase_date'];
+		$item['appraisal'] = $_POST['appraisal'];
+		$item['appraisal_date'] = $_POST['appraisal_date'];
+
+		// date fields are sensitive to an empty string (must be NULL instead)
+		if ($item['purchase_date'] == '')
+			$item['purchase_date'] = NULL;
+		if ($item['appraisal_date'] == '')
+			$item['appraisal_date'] = NULL;
+
+		// build the query
+		$values = array(
+			$item['purchase_price'],
+			$item['purchase_date'],
+			$item['appraisal'],
+			$item['appraisal_date'],
+			$item_id);
+
+		$query = "update art set purchase_price = $1, purchase_date = $2, appraisal = $3, appraisal_date = $4 where id = $5";
+		break;
+
+	default:
+		return false;
 	}
+
+	// if everything is ok, execute the query
+	return pg_query_params($db, $query, $values);
 }
 
 function insert_art_item($db)
