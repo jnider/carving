@@ -1,0 +1,147 @@
+
+@media only screen and (min-width: 850px) {
+   #wrapper {
+      width: 800px;
+   }
+}
+
+@media only screen and (max-width: 849px) {
+   #wrapper {
+      width: 340px;
+   }
+}
+
+:root {
+	--dark-color: #A0A0D0;
+	--light-color: #A8A8D0;
+	--wrapper-color: #C0C0E0;
+}
+
+body {
+	background-color: var(--light-color);
+}
+
+
+div.center {
+   text-align: center;
+   width: 80%;
+}
+
+#content td {
+	border: 1px solid gray;
+	padding: 0px 50px 0px 10px;
+	margin: 0px;
+}
+
+#description {
+	width: 60%;
+	border: 1px solid gray;
+	padding: 0px 50px 0px 10px;
+	margin: 0px;
+}
+
+#wrapper {
+   margin: 4px auto;
+   text-align: left;
+	background-color: var(--wrapper-color);
+	border: 2px solid gray;
+	height: 100%;
+}
+
+#instructions {
+   padding: 20px 0px 20px 0px;
+}
+
+#content {
+   list-style: none;
+}
+
+#content li {
+   float: left;
+}
+
+H1,H2 {
+	background-color: var(--dark-color);
+}
+
+div.response {
+	font-size 24pt;
+	background-color: red;
+}
+
+/* navigation */
+div.menu {
+	margin: 0;
+	border: 2px solid gray;
+	font-size: 16px;
+	background-color: var(--wrapper-color);
+	position: sticky;
+	position: -webkit-sticky;
+	top: 10;
+}
+
+ul.menu {
+	list-style-type: none;
+	margin: 0;
+	padding 0;
+	overflow: hidden;
+}
+
+li.menu {
+	margin: 5px 5px;
+	list-style: none;
+	float: left; /*  make the menu items side-by-side */
+	width: 110px;
+	background-color: var(--light-color);
+}
+
+li.menu.inactive {
+	background-color: #805F30;
+}
+
+a.menu {
+	display: block;
+	color: #fff;
+	text-align: center;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a.menu:hover {
+	text-decoration: underline;
+}
+
+
+.leftpane {
+	float: left;
+	/* width: 10%; */
+	height: 100%;
+	border-collapse: collapse;
+}
+
+.middlepane {
+	width: 85%;
+	height: 100%;
+	float: left;
+	border-collapse: collapse;
+}
+
+.rightpane {
+	float: left;
+	/* width: 10%; */
+	height: 100%;
+	/* position: relative; */
+	border-collapse: collapse;
+}
+
+img.disabled {
+    -webkit-filter: grayscale(100%);
+       -moz-filter: grayscale(100%);
+         -o-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+            filter: grayscale(100%);
+}
+
+a.edit {
+	float: right;
+}
