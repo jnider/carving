@@ -12,7 +12,7 @@ function show_form_add_user()
 	echo "<tr><td>User Name:<td><input type=\"text\" name=\"name\"></tr>\n";
 	echo "<tr><td>Password:<td><input type=\"password\" name=\"pass\"></tr>\n";
 	echo "<tr><td>Confirm Password:<td><input type=\"password\" name=\"pass2\"></tr>\n";
-	echo "<tr><td>Write Access:<td><input type=\"checkbox\" name=\"write\" value=\"1\"></tr>\n";
+	echo "<tr><td>Administrator Privileges:<td><input type=\"checkbox\" name=\"write\" value=\"1\"></tr>\n";
 	echo "</table>\n";
 	echo "<input type=\"submit\" value=\"Add\">\n";
 	echo "</form>\n";
@@ -102,10 +102,13 @@ show_form_add_user();
 $users = get_all_users($db);
 echo "<H2>Existing Users</H2>\n";
 echo "<table>\n";
-echo "<tr id='content'><td>Name<td>Privileges<td>Change Password<td>Delete</tr>\n";
+echo "<tr id='content'><td>Name<td>Administrator<td>Change Password<td>Delete</tr>\n";
 
 foreach ($users as &$user)
-	echo "<tr id='content'><td>$user[name]<td>$user[write]<td>X<td><a href='?action=delete&user_id=$user[user_id]' onclick=\"return confirm('Are you sure you want to delete this user?')\">X</a></tr>";
+{
+	$admin = ($user['write'] == 1) ? "Yes": "";
+	echo "<tr id='content'><td>${user['name']}<td>$admin<td>X<td><a href='?action=delete&user_id=${user['user_id']}' onclick=\"return confirm('Are you sure you want to delete this user?')\">X</a></tr>";
+}
 
 echo "</table>\n";
 
