@@ -4,28 +4,49 @@ include('login.php');
 include('db.php');
 include('menu.php');
 
+function delete_picture($db, $item_id, $photo_id)
+{
+	$values = array($item_id, $photo_id);
+
+	// verify that both art id and picture id match
+	$query = "delete from photos where art_id = $1 and photo_id = $2";
+
+	// if everything is ok, execute the query
+	$res = pg_query_params($db, $query, $values);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error retrieving picutres id=$item_id: $err";
+		return FALSE;
+	}
+
+	$pictures = pg_fetch_all($res);
+	return $pictures;
+}
+
 /**
 	Validate an uploaded picture and add it to the database.
 */
 function add_uploaded_picture($db, $item_id, $picture)
 { 
-	$uploaddir = '/home/joel/carving/pictures/';
+	$uploaddir = '/opt/carving/www/pictures/';
 	$max_picture_size = 1024000;
-	echo "add_uploaded_picture id=$item_id path=${picture['name']} size=${picture['size']}\n";
+	//echo "add_uploaded_picture id=$item_id path=${picture['name']} size=${picture['size']}\n";
 
 	// check the size
-	if ($picture['size'] > $max_picture_size)
+	if ($picture['size'] == 0 || $picture['size'] > $max_picture_size)
 	{
 		echo "<div class=response>Your picture is too big. It is ${picture['size']} bytes, but the maximum is $max_picture_size</div>\n";
-		// clean up
 		return;
 	}
 
 	// make sure it is really a JPEG with exif_imagetype()
 
+	// generate a unique name
+	$unique_name = sha1_file($picture['tmp_name']) . ".jpg";
+
 	// move it to the correct location
-	$uploadfile = $uploaddir . "asdf.jpg";
-	echo "Moving ${picture['tmp_name']} to  $uploadfile";
+	$uploadfile = $uploaddir . $unique_name;
 	if (!move_uploaded_file($picture['tmp_name'], $uploadfile))
 	{
 		echo "<div class=response>Error storing the picture</div>\n";
@@ -34,6 +55,33 @@ function add_uploaded_picture($db, $item_id, $picture)
 	}
 
 	// if everything is ok, add it to the database
+	$values = array(
+		$item_id,
+		$unique_name);
+
+	$query = "insert into photos (art_id, url) values ($1, $2)";
+
+	// if everything is ok, execute the query
+	return pg_query_params($db, $query, $values);
+}
+
+function get_pictures($db, $item_id)
+{
+	$values = array($item_id);
+
+	$query = "select * from photos where art_id = $1";
+
+	// if everything is ok, execute the query
+	$res = pg_query_params($db, $query, $values);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error retrieving pictures id=$item_id: $err";
+		return FALSE;
+	}
+
+	$pictures = pg_fetch_all($res);
+	return $pictures;
 }
 
 function get_item($db, $item_id)
@@ -231,19 +279,31 @@ function show_form_modify_art($db, $item_id, $group)
 	if ($item == false)
 		return;
 
-	echo "DB ID: $item_id\n";
+	// echo "DB ID: $item_id\n";
 
 	// Pictures are handled differently than the rest of the entries
 	// They are all separate files and are stored in a different table
 	if ($group == "pictures")
 	{
+		$pictures = get_pictures($db, $item_id);
 		echo "<h1>Modify Pictures</h1>\n";
+		echo "<h2>Add New Picture</h2>\n";
 		echo "<form method=\"post\" enctype=\"multipart/form-data\">\n";
 		echo "<input type=\"hidden\" name=\"action\" value=\"add_picture\">\n";
 		echo "<input type=\"hidden\" name=\"item_id\" value=\"$item_id\">\n";
 		echo "<input type=\"file\" name=\"picture\" accept=\"image/png, image/jpeg\">\n";
 		echo "<input type=\"submit\" value=\"Upload\">\n";
 		echo "</form>\n";
+
+		if ($pictures)
+		{
+			echo "<h2>Existing Pictures For This Item</h2>\n";
+			echo "<table>\n";
+			foreach ($pictures as &$picture)
+				echo "<tr><td><img width=300px src=\"pictures/${picture['url']}\"></img><td><a href=?action=delete_picture&item_id=$item_id&photo_id=${picture['photo_id']} onclick=\"return confirm('Are you sure you want to delete this picture?')\">Remove</a></tr>\n";
+			echo "</table>\n";
+		}
+
 		return;
 	}
 
@@ -356,17 +416,21 @@ function show_art($db, $item_id)
 	$communities = get_communities($db);
 	$community = lookup_community($communities, $item['community']);
 
+	// get pictures
+	$pictures = get_pictures($db, $item_id);
 
+	echo "<div>\n";
 	echo "<div class='leftpane'>\n";
 	if ($prev_item_id == -1)
-		echo "<img class=disabled src=\"images/left-arrow.png\" width=50px>\n";
+		echo "<img class=disabled src=\"images/left-arrow.png\" width=50px></img>\n";
 	else
-		echo "<a href=\"?item_id=$prev_item_id\"><img src=\"images/left-arrow.png\" width=50px></a>\n";
+		echo "<a href=\"?item_id=$prev_item_id\"><img src=\"images/left-arrow.png\" width=50px></img></a>\n";
 	echo "</div>\n";
-	echo "<div class='middlepane'>\n";
 
+	echo "<div class='middlepane'>\n";
 	echo "<h2>Details</h2>\n";
-	echo "<a class=edit href=\"?action=form_modify&group=details&item_id=${item['id']}\">Edit...</a>";
+	if (is_admin())
+		echo "<a class=edit href=\"?action=form_modify&group=details&item_id=${item['id']}\">Edit...</a>";
 	echo "<table>\n";
 	echo "<tr><td>Book ID:<td>${item['book_id']}</tr>";
 	echo "<tr><td>Tag ID:<td>${item['reg_tag']}</tr>";
@@ -378,7 +442,8 @@ function show_art($db, $item_id)
 	echo "</table>\n";
 
 	echo "<h2>Dimensions</h2>\n";
-	echo "<a class=edit href=\"?action=form_modify&group=dimensions&item_id=${item['id']}\">Edit...</a>";
+	if (is_admin())
+		echo "<a class=edit href=\"?action=form_modify&group=dimensions&item_id=${item['id']}\">Edit...</a>";
 	echo "<table>\n";
 	echo "<tr><td>Height:<td>${item['height']} cm</tr>";
 	echo "<tr><td>Width:<td>${item['width']} cm</tr>";
@@ -387,7 +452,8 @@ function show_art($db, $item_id)
 	echo "</table>\n";
 
 	echo "<h2>Price</h2>\n";
-	echo "<a class=edit href=\"?action=form_modify&group=price&item_id=${item['id']}\">Edit...</a>";
+	if (is_admin())
+		echo "<a class=edit href=\"?action=form_modify&group=price&item_id=${item['id']}\">Edit...</a>";
 	echo "<table>\n";
 	echo "<tr><td>Purchase Date:<td>${item['purchase_date']}</tr>\n";
 	echo "<tr><td>Purchase Price:<td>${item['purchase_price']}</tr>\n";
@@ -396,17 +462,22 @@ function show_art($db, $item_id)
 	echo "</table>\n";
 
 	echo "<h2>Pictures</h2>\n";
-	echo "<a class=edit href=\"?action=form_modify&group=pictures&item_id=${item['id']}\">Edit...</a>";
+	if (is_admin())
+		echo "<a class=edit href=\"?action=form_modify&group=pictures&item_id=${item['id']}\">Edit...</a>";
 
-	echo "<div id=content>\n";
-	echo "</div>\n";
-	echo "</div>\n";
+	echo "<table>\n";
+	foreach ($pictures as &$picture)
+		echo "<tr><td><img width=300px src=\"pictures/${picture['url']}\"></img></tr>\n";
+	echo "</table>\n";
+	echo "</div class='middlepane'>\n";
 
 	echo "<div class='rightpane'>\n";
 	if ($next_item_id == -1)
-		echo "<img class=disabled src=\"images/right-arrow.png\" width=50px>\n";
+		echo "<img class=disabled src=\"images/right-arrow.png\" width=50px></img>\n";
 	else
-		echo "<a href=\"?item_id=$next_item_id\"><img src=\"images/right-arrow.png\" width=50px></a>\n";
+		echo "<a href=\"?item_id=$next_item_id\"><img src=\"images/right-arrow.png\" width=50px></img></a>\n";
+	echo "</div>\n";
+
 	echo "</div>\n";
 }
 
@@ -593,8 +664,21 @@ case "modify":
 case "add_picture":
 	$item_id = $_POST['item_id'];
 	$picture = $_FILES['picture'];
-	echo "Add picture=${picture['name']} to item=$item_id";
-	add_uploaded_picture($db, $item_id, $picture);
+	//echo "Add picture=${picture['name']} to item=$item_id";
+	if (!add_uploaded_picture($db, $item_id, $picture))
+		echo "<div class=response>Error adding picture</div>\n";
+	show_art($db, $item_id);
+	break;
+
+case "delete_picture":
+	$item_id = $_GET['item_id'];
+	$photo_id = $_GET['photo_id'];
+	delete_picture($db, $item_id, $photo_id);
+	show_form_modify_art($db, $item_id, "pictures");
+	break;
+
+case "search":
+	echo "<div class=response>The search function is not yet implemented</div>\n";
 	break;
 
 default:
