@@ -86,6 +86,17 @@ function is_logged_in()
 	return FALSE;
 }
 
+/**
+	Does the current user have admin privileges
+*/
+function is_admin()
+{
+	if (isset($_SESSION['username']) && $_SESSION['privilege'] == 1)
+		return TRUE;
+
+	return FALSE;
+}
+
 // figure out what we are supposed to do
 if (isset($_POST['action']))
 {
