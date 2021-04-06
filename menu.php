@@ -24,9 +24,8 @@ HTML;
 echo <<< HTML
 	<ul class='menu'>
 		<li class='menu'><a class='menu' href="art.php?action=form_add">Add Art Item</a></li>
-		<li class='menu'><a class='menu' href="community.php?action=form_add">Add Community</a></li>
-		<li class='menu'><a class='menu' href="community.php">Edit Communities</a></li>
-		<li class='menu'><a class='menu' href="user.php">Modify User Accounts</a></li>
+		<li class='menu'><a class='menu' href="community.php?action=form_add">Communities</a></li>
+		<li class='menu'><a class='menu' href="user.php">User Accounts</a></li>
 	</ul>
 HTML;
 	}
