@@ -164,7 +164,7 @@ function lookup_art_type($art_types, $type)
 */
 function get_art_types($db)
 {
-	$res = pg_query($db, 'select * from art_type');
+	$res = pg_query($db, 'select * from art_type order by type asc');
 	if (!$res)
 	{
 		echo "Error building art type list";
@@ -189,7 +189,7 @@ function lookup_community($communities, $id)
 */
 function get_communities($db)
 {
-	$res = pg_query($db, 'select * from community_lu');
+	$res = pg_query($db, 'select * from community_lu order by name asc');
 	if (!$res)
 	{
 		echo "Error building community list";
@@ -279,7 +279,7 @@ function show_form_modify_art($db, $item_id, $group)
 	if ($item == false)
 		return;
 
-	// echo "DB ID: $item_id\n";
+	//echo "DB ID=$item_id Group=$group\n";
 
 	// Pictures are handled differently than the rest of the entries
 	// They are all separate files and are stored in a different table
@@ -456,9 +456,9 @@ function show_art($db, $item_id)
 		echo "<a class=edit href=\"?action=form_modify&group=price&item_id=${item['id']}\">Edit...</a>";
 	echo "<table>\n";
 	echo "<tr><td>Purchase Date:<td>${item['purchase_date']}</tr>\n";
-	echo "<tr><td>Purchase Price:<td>${item['purchase_price']}</tr>\n";
+	echo "<tr><td>Purchase Price:<td>$${item['purchase_price']}</tr>\n";
 	echo "<tr><td>Appraisal Date:<td>${item['appraisal_date']}</tr>\n";
-	echo "<tr><td>Appraisal Price:<td>${item['appraisal']}</tr>\n";
+	echo "<tr><td>Appraisal Price:<td>$${item['appraisal']}</tr>\n";
 	echo "</table>\n";
 
 	echo "<h2>Pictures</h2>\n";
@@ -489,6 +489,8 @@ function modify_art_item($db, $item_id, $group)
 		echo "<div class=response>You do not have permission to modify items</div>\n";
 		return FALSE;
 	}
+
+	//echo "item_id=$item_id group=$group";
 
 	switch($group)
 	{
@@ -522,7 +524,6 @@ function modify_art_item($db, $item_id, $group)
 		$item['width'] = $_POST['width'];
 		$item['depth'] = $_POST['depth'];
 		$item['pieces'] = $_POST['pieces'];
-		break;
 
 		// build the query
 		$values = array(
@@ -600,16 +601,16 @@ function insert_art_item($db)
 		$item['artist'],
 		intval($item['community']),
 		intval($item['book_id']),
-		intval($item['reg_tag']),
+		$item['reg_tag'],
 		$item['description'],
 		intval($item['height']),
 		intval($item['width']),
 		intval($item['depth']),
 		intval($item['pieces']),
 		intval($item['purchase_price']),
-		intval($item['purchase_date']),
+		$item['purchase_date'],
 		intval($item['appraisal']),
-		intval($item['appraisal_date']));
+		$item['appraisal_date']);
 	$query = "insert into art (art_type, material, artist, community, book_id, reg_tag, description, height, width, depth, pieces, purchase_price, purchase_date, appraisal, appraisal_date) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)";
 
 	return pg_query_params($db, $query, $values);
