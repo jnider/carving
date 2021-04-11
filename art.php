@@ -1,7 +1,6 @@
 <?php
 
 include('login.php');
-include('db.php');
 include('menu.php');
 
 function delete_picture($db, $item_id, $photo_id)

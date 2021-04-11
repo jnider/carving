@@ -1,6 +1,6 @@
 <?php
 
-include('login.php');
+include_once('login.php');
 
 function logout()
 {

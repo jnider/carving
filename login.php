@@ -1,5 +1,7 @@
 <?php
 
+include('db.php');
+
 // Used to track the user's session by logging in and out
 // users are authenticated against the local database so
 // all credentials are kept during snapshots.
@@ -79,7 +81,8 @@ HTML;
 
 function is_logged_in()
 {
-	session_start();
+	if (!session_id())
+		session_start();
 	if (isset($_SESSION['username']))
 	{
 		$username = $_SESSION['username'];
@@ -105,21 +108,24 @@ $db = connect_to_db();
 if (isset($_POST['action']))
 {
 	$page_action = $_POST['action'];
-	$user_id = $_POST['user_id'];
 }
 
-switch($page_action)
+if (isset($page_action))
 {
-case "login":
-	if ($db && login($db, $_POST['username'], $_POST['password']))
-			header('Location: index.php');
-	else
+	switch($page_action)
 	{
-		start_page("Login");
-		echo "ERROR: can't log in<BR>\nCheck your username and password";
-		end_page();
+	case "login":
+		if ($db && login($db, $_POST['username'], $_POST['password']))
+		{
+				$login_failed = false;
+				header('Location: index.php');
+		}
+		else
+		{
+			$login_failed = true;
+		}
+		break;
 	}
-	break;
 }
 
 ?>

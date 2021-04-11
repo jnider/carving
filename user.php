@@ -1,8 +1,7 @@
 <?php
 
-include('login.php');
-include('db.php');
-include('menu.php');
+include_once('login.php');
+include_once('menu.php');
 
 function show_form_add_user()
 {
