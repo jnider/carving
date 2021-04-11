@@ -64,7 +64,9 @@ echo <<< HTML
 	<div id='wrapper'>
 HTML;
 
-	menu();
+	// don't show the menu if the user is not logged in
+	if (isset($_SESSION['username']))
+		menu();
 }
 
 function end_page()
@@ -97,6 +99,8 @@ function is_admin()
 	return FALSE;
 }
 
+$db = connect_to_db();
+
 // figure out what we are supposed to do
 if (isset($_POST['action']))
 {
@@ -104,19 +108,18 @@ if (isset($_POST['action']))
 	$user_id = $_POST['user_id'];
 }
 
-	switch($page_action)
+switch($page_action)
+{
+case "login":
+	if ($db && login($db, $_POST['username'], $_POST['password']))
+			header('Location: index.php');
+	else
 	{
-	case "login":
-		$db = connect_to_db();
-		if ($db && login($db, $_POST['username'], $_POST['password']))
-				header('Location: index.php');
-		else
-		{
-			start_page("Login");
-			echo "ERROR: can't log in<BR>";
-			end_page();
-		}
-		break;
+		start_page("Login");
+		echo "ERROR: can't log in<BR>\nCheck your username and password";
+		end_page();
 	}
+	break;
+}
 
 ?>
