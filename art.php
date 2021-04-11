@@ -184,21 +184,6 @@ function lookup_community($communities, $id)
 }
 
 /**
-	Retrieve the community_lu table from the database.
-*/
-function get_communities($db)
-{
-	$res = pg_query($db, 'select * from community_lu order by name asc');
-	if (!$res)
-	{
-		echo "Error building community list";
-		return FALSE;
-	}
-	$communities = pg_fetch_all($res);
-	return $communities;
-}
-
-/**
 	Display a form for adding a new art item
 */
 function show_form_add_art($db)

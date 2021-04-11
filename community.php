@@ -67,15 +67,6 @@ function update_community($db, $id, $name, $alt_name)
 	return true;
 }
 
-function get_communities($db)
-{
-	$query = 'select * from community_lu';
-	$res = pg_query_params($db, $query, array());
-	if ($res == FALSE)
-		return FALSE;
-	return pg_fetch_all($res);
-}
-
 /****************************************/
 // make sure the user is logged in
 if (!is_logged_in())

@@ -49,4 +49,19 @@ function count_collections($db)
 	return $all['count'];
 }
 
+/**
+	Retrieve the community_lu table from the database.
+*/
+function get_communities($db)
+{
+	$res = pg_query($db, 'select * from community_lu order by name asc');
+	if (!$res)
+	{
+		echo "Error building community list";
+		return FALSE;
+	}
+	$communities = pg_fetch_all($res);
+	return $communities;
+}
+
 ?>
