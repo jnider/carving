@@ -21,12 +21,6 @@ body {
 	background-color: var(--light-color);
 }
 
-
-div.center {
-   text-align: center;
-   width: 80%;
-}
-
 #content td {
 	border: 1px solid gray;
 	padding: 0px 50px 0px 10px;
@@ -41,11 +35,11 @@ div.center {
 }
 
 #wrapper {
-   margin: 4px auto;
+	margin: auto;
    text-align: left;
 	background-color: var(--wrapper-color);
 	border: 2px solid gray;
-	height: 100%;
+	min-height: 100%;
 }
 
 #instructions {
@@ -114,23 +108,18 @@ a.menu:hover {
 
 .leftpane {
 	float: left;
-	/* width: 10%; */
-	height: 100%;
 	border-collapse: collapse;
 }
 
 .middlepane {
 	width: 85%;
-	height: 100%;
 	float: left;
 	border-collapse: collapse;
+	min-height: 100%;
 }
 
 .rightpane {
 	float: left;
-	/* width: 10%; */
-	height: 100%;
-	/* position: relative; */
 	border-collapse: collapse;
 }
 
