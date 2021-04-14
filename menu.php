@@ -19,13 +19,12 @@ echo <<< HTML
 	</ul>
 HTML;
 
-	if ($_SESSION[privilege] == 1)
+	if ($_SESSION['privilege'] == 1)
 	{
 echo <<< HTML
 	<ul class='menu'>
 		<li class='menu'><a class='menu' href="art.php?action=form_add">Add Art Item</a></li>
-		<li class='menu'><a class='menu' href="community.php?action=form_add">Communities</a></li>
-		<li class='menu'><a class='menu' href="user.php">User Accounts</a></li>
+		<li class='menu'><a class='menu' href="admin.php">Admin</a></li>
 	</ul>
 HTML;
 	}
