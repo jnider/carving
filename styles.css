@@ -58,9 +58,40 @@ H1,H2 {
 	background-color: var(--dark-color);
 }
 
-div.response {
+div.response_ok {
+	font-size 24pt;
+	background-color: green;
+}
+
+div.response_bad {
 	font-size 24pt;
 	background-color: red;
+}
+
+a.button {
+	display: block;
+	color: #000fff;
+	background-color: var(--dark-color);
+	text-align: center;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 10px 20px;
+	border-radius: 10px;
+}
+
+a.button:hover {
+	color: #606fff;
+}
+
+a.edit {
+	display: block;
+	background-color: var(--wrapper-color);
+	border-radius: 10px;
+	float: right;
+}
+
+a.edit:hover {
+	background-color: var(--light-color);
 }
 
 /* navigation */
@@ -131,6 +162,3 @@ img.disabled {
             filter: grayscale(100%);
 }
 
-a.edit {
-	float: right;
-}

@@ -121,7 +121,7 @@ echo "<H2>Communitites</H2>\n";
 echo "<table>\n";
 echo "<tr id='content'><td>Name<td>Alternate Name<td>Modify<td>Delete</tr>\n";
 foreach ($communities as &$community)
-	echo "<tr id='content'><td>$community[name]<td>$community[alt_name]<td><a href=\"?action=modify&id=$community[id]\">X</a><td>X</tr>\n";
+	echo "<tr id='content'><td>$community[name]<td>$community[alt_name]<td><a href=\"?action=modify&id=$community[id]\"><img src=images/edit.png></a><td>X</tr>\n";
 echo "</table>\n";
 
 stop_page();
