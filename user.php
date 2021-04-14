@@ -106,7 +106,8 @@ echo "<tr id='content'><td>Name<td>Administrator<td>Change Password<td>Delete</t
 foreach ($users as &$user)
 {
 	$admin = ($user['write'] == 1) ? "Yes": "";
-	echo "<tr id='content'><td>${user['name']}<td>$admin<td>X<td><a href='?action=delete&user_id=${user['user_id']}' onclick=\"return confirm('Are you sure you want to delete this user?')\">X</a></tr>";
+	echo "<tr id='content'><td>${user['name']}<td>$admin<td><img src=images/edit.png>
+		<td><a href='?action=delete&user_id=${user['user_id']}' onclick=\"return confirm('Are you sure you want to delete this user?')\"><img src=images/delete.png></a></tr>";
 }
 
 echo "</table>\n";
