@@ -49,6 +49,61 @@ function count_collections($db)
 	return $all['count'];
 }
 
+function sum_purchase_price($db)
+{
+	$query = "select sum(purchase_price) from art";
+
+	$res = pg_query($db, $query);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error counting collections in db: $err";
+		return FALSE;
+	}
+
+	$all = pg_fetch_assoc($res);
+	return $all['sum'];
+}
+
+function eval_price($db)
+{
+	$total = 0;
+
+	$query = "select id, purchase_price, purchase_date, appraisal, appraisal_date from art";
+	$res = pg_query($db, $query);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error counting collections in db: $err";
+		return FALSE;
+	}
+
+	$all = pg_fetch_all($res);
+	foreach ($all as &$item)
+	{
+		if ($item['purchase_price'] == NULL)
+			continue;
+
+		if ($item['purchase_date'] && $item['appraisal'] != '0' && $item['appraisal_date'])
+		{
+			/* perform a 2-point 'linear regression' */
+
+			// price difference
+			$price_diff = $item['appraisal'] - $item['purchase_price'];
+
+			// time difference
+			//echo "Purchase date: ${item['purchase_date']}";
+			$pdate = date_create_from_format("!Y-m-d", $item['purchase_date']);
+			$adate = date_create_from_format("!Y-m-d", $item['appraisal_date']);
+			//echo "Increase ${item['id']}: $price_diff<BR>\n";
+		}
+		else
+			$total += $item['purchase_price'];
+	}
+
+	return $total;
+}
+
 /**
 	Retrieve the community_lu table from the database.
 */
@@ -129,6 +184,91 @@ function delete_art_type($db, $id)
 	if ($res == FALSE)
 		return FALSE;
 	return TRUE;
+}
+
+/**
+	Get all art items in the database
+*/
+function get_art($db)
+{
+	$query = "select * from art order by book_id asc";
+
+	$res = pg_query($db, $query);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error getting art items: $err";
+		return FALSE;
+	}
+
+	$items = pg_fetch_all($res);
+	return $items;
+}
+
+/**
+	Extract artist names from all art items
+*/
+function get_artists($db)
+{
+	$query = "select distinct artist from art order by artist asc";
+
+	$res = pg_query($db, $query);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error getting art items: $err";
+		return FALSE;
+	}
+
+	$artists = array();
+	while ($row = pg_fetch_assoc($res))
+	{
+		if ($row['artist'] != '')
+			$artists[] = $row['artist'];
+	}
+	return $artists;
+}
+
+function delete_picture($db, $item_id, $photo_id)
+{
+	$values = array($item_id, $photo_id);
+
+	// verify that both art id and picture id match
+	$query = "delete from photos where art_id = $1 and photo_id = $2";
+
+	// if everything is ok, execute the query
+	$res = pg_query_params($db, $query, $values);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error retrieving pictures id=$item_id: $err";
+		return FALSE;
+	}
+
+	$pictures = pg_fetch_all($res);
+	return $pictures;
+}
+
+/**
+	Get all of the pictures associated with an item
+*/
+function get_pictures($db, $item_id)
+{
+	$values = array($item_id);
+
+	$query = "select * from photos where art_id = $1";
+
+	// if everything is ok, execute the query
+	$res = pg_query_params($db, $query, $values);
+	if (!$res)
+	{
+		$err = pg_last_error($db);
+		echo "Error retrieving pictures id=$item_id: $err";
+		return FALSE;
+	}
+
+	$pictures = pg_fetch_all($res);
+	return $pictures;
 }
 
 ?>

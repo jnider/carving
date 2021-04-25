@@ -14,7 +14,7 @@ function menu()
 echo <<< HTML
 	<ul class='menu'>
 		<li class='menu'><a class='menu' href="art.php">Browse</a></li>
-		<li class='menu'><a class='menu' href="art.php?action=search">Search</a></li>
+		<li class='menu'><a class='menu' href="search.php">Search</a></li>
 		<li class='menu'><a class='menu' href="logout.php?action=logout">Logout</a></li>
 	</ul>
 HTML;

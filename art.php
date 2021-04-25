@@ -1,27 +1,6 @@
 <?php
 
 include('login.php');
-include('menu.php');
-
-function delete_picture($db, $item_id, $photo_id)
-{
-	$values = array($item_id, $photo_id);
-
-	// verify that both art id and picture id match
-	$query = "delete from photos where art_id = $1 and photo_id = $2";
-
-	// if everything is ok, execute the query
-	$res = pg_query_params($db, $query, $values);
-	if (!$res)
-	{
-		$err = pg_last_error($db);
-		echo "Error retrieving picutres id=$item_id: $err";
-		return FALSE;
-	}
-
-	$pictures = pg_fetch_all($res);
-	return $pictures;
-}
 
 /**
 	Validate an uploaded picture and add it to the database.
@@ -64,35 +43,16 @@ function add_uploaded_picture($db, $item_id, $picture)
 	return pg_query_params($db, $query, $values);
 }
 
-function get_pictures($db, $item_id)
-{
-	$values = array($item_id);
-
-	$query = "select * from photos where art_id = $1";
-
-	// if everything is ok, execute the query
-	$res = pg_query_params($db, $query, $values);
-	if (!$res)
-	{
-		$err = pg_last_error($db);
-		echo "Error retrieving pictures id=$item_id: $err";
-		return FALSE;
-	}
-
-	$pictures = pg_fetch_all($res);
-	return $pictures;
-}
-
 function get_item($db, $item_id)
 {
 	if (!isset($item_id))
-		$res = pg_query($db, "select * from art limit 1");
+		$res = pg_query($db, "select * from art order by book_id desc limit 1");
 	else
 		$res = pg_query($db, "select * from art where id = '$item_id'");
 	if (!$res)
 	{
 		$err = pg_last_error($db);
-		echo "Error retrieving art id=$item_id: $err";
+		echo "Error retrieving art item_id=$item_id: $err";
 		return FALSE;
 	}
 	$item = pg_fetch_assoc($res);
@@ -105,11 +65,13 @@ function get_item($db, $item_id)
 
 	This should take into account the 'collection' of the current user
 	(currently it doesn't)
+
+	Returns an item id (not book id)
 */
 
-function get_previous_item_id($db, $curr_id)
+function get_previous_item_by_book_id($db, $curr_book_id)
 {
-	$res = pg_query($db, "select * from art where id < '$curr_id' order by id desc");
+	$res = pg_query($db, "select * from art where book_id < '$curr_book_id' order by book_id desc limit 1");
 	if ($res)
 	{
 		$temp_item = pg_fetch_assoc($res);
@@ -124,16 +86,26 @@ function get_previous_item_id($db, $curr_id)
 
 	This should take into account the 'collection' of the current user
 	(currently it doesn't)
+
+	Returns an item id (not book id)
 */
-function get_next_item_id($db, $curr_id)
+function get_next_item_by_book_id($db, $curr_book_id)
 {
-	$res = pg_query($db, "select * from art where id > '$curr_id' order by id asc");
+	$res = pg_query($db, "select * from art where book_id > '$curr_book_id' order by book_id asc limit 1");
 	if ($res)
 	{
 		$temp_item = pg_fetch_assoc($res);
 		if ($temp_item != false)
 			return $temp_item['id'];
 	}
+	return -1;
+}
+
+function get_last_item_book_id($db)
+{
+	$temp_item = get_item($db, NULL);
+	if ($temp_item != false)
+		return $temp_item['book_id'];
 	return -1;
 }
 
@@ -152,25 +124,6 @@ function lookup_art_type($art_types, $type)
 			return $art_type['type'];
 	}
 	return "Unknown";
-}
-
-/**
-	Retrieve the art_type table from the database.
-
-	The art type describes the type of art - painting, carving, etc.
-	This can be used to show all of the possible types (like in a dropdown
-	selection box) or looking up a particular string.
-*/
-function get_art_types($db)
-{
-	$res = pg_query($db, 'select * from art_type order by type asc');
-	if (!$res)
-	{
-		echo "Error building art type list";
-		return FALSE;
-	}
-	$art_types = pg_fetch_all($res);
-	return $art_types;
 }
 
 function lookup_community($communities, $id)
@@ -312,7 +265,7 @@ function show_form_modify_art($db, $item_id, $group)
 		{
 			$id = $art_type['id'];
 			$type = $art_type['type'];
-			if ($type == $art_type['id'])
+			if ($id == $item['art_type'])
 				echo "<option selected value=\"$id\">$type\n";
 			else
 				echo "<option value=\"$id\">$type\n";
@@ -383,14 +336,14 @@ function show_art($db, $item_id)
 		echo "<div class=response>No items in database!</div>\n";
 		return;
 	}
-
-	$curr_item_id = $item['id'];
+	if (!isset($book_id))
+		$book_id = $item['book_id'];
 
 	// find the previous item
-	$prev_item_id = get_previous_item_id($db, $curr_item_id);
+	$prev_item_id = get_previous_item_by_book_id($db, $book_id);
 
 	// find the next item
-	$next_item_id = get_next_item_id($db, $curr_item_id);
+	$next_item_id = get_next_item_by_book_id($db, $book_id);
 
 	// Replace art_type id with string
 	$art_types = get_art_types($db);
@@ -414,7 +367,7 @@ function show_art($db, $item_id)
 	echo "<div class='middlepane'>\n";
 	echo "<h2>Details</h2>\n";
 	if (is_admin())
-		echo "<a class=edit href=\"?action=form_modify&group=details&item_id=${item['id']}\">Edit...</a>";
+		echo "<a class=edit href=\"?action=form_modify&group=details&item_id=${item['id']}\"><img src=images/edit.png></a>";
 	echo "<table>\n";
 	echo "<tr><td>Book ID:<td>${item['book_id']}</tr>";
 	echo "<tr><td>Tag ID:<td>${item['reg_tag']}</tr>";
@@ -427,7 +380,7 @@ function show_art($db, $item_id)
 
 	echo "<h2>Dimensions</h2>\n";
 	if (is_admin())
-		echo "<a class=edit href=\"?action=form_modify&group=dimensions&item_id=${item['id']}\">Edit...</a>";
+		echo "<a class=edit href=\"?action=form_modify&group=dimensions&item_id=${item['id']}\"><img src=images/edit.png></a>";
 	echo "<table>\n";
 	echo "<tr><td>Height:<td>${item['height']} cm</tr>";
 	echo "<tr><td>Width:<td>${item['width']} cm</tr>";
@@ -437,7 +390,7 @@ function show_art($db, $item_id)
 
 	echo "<h2>Price</h2>\n";
 	if (is_admin())
-		echo "<a class=edit href=\"?action=form_modify&group=price&item_id=${item['id']}\">Edit...</a>";
+		echo "<a class=edit href=\"?action=form_modify&group=price&item_id=${item['id']}\"><img src=images/edit.png></a>";
 	echo "<table>\n";
 	echo "<tr><td>Purchase Date:<td>${item['purchase_date']}</tr>\n";
 	echo "<tr><td>Purchase Price:<td>$${item['purchase_price']}</tr>\n";
@@ -447,7 +400,7 @@ function show_art($db, $item_id)
 
 	echo "<h2>Pictures</h2>\n";
 	if (is_admin())
-		echo "<a class=edit href=\"?action=form_modify&group=pictures&item_id=${item['id']}\">Edit...</a>";
+		echo "<a class=edit href=\"?action=form_modify&group=pictures&item_id=${item['id']}\"><img src=images/edit.png></a>";
 
 	echo "<table>\n";
 	foreach ($pictures as &$picture)
@@ -578,6 +531,12 @@ function insert_art_item($db)
 	$item['appraisal'] = $_POST['appraisal'];
 	$item['appraisal_date'] = $_POST['appraisal_date'];
 
+	// date fields are sensitive to an empty string (must be NULL instead)
+	if ($item['purchase_date'] == '')
+		$item['purchase_date'] = NULL;
+	if ($item['appraisal_date'] == '')
+		$item['appraisal_date'] = NULL;
+
 	// build the query
 	$values = array(
 		intval($item['art_type']),
@@ -662,8 +621,9 @@ case "delete_picture":
 	show_form_modify_art($db, $item_id, "pictures");
 	break;
 
-case "search":
-	echo "<div class=response>The search function is not yet implemented</div>\n";
+case "show":
+	$item_id = $_GET['item_id'];
+	show_art($db, $item_id);
 	break;
 
 default:
