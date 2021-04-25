@@ -101,7 +101,7 @@ switch($page_action)
 		if ($ret)
 			echo "<div class=response>Community not added: $ret</div>\n";
 		else
-			echo "<div class=response>\"$community_name\" was added succesfully</div>\n";
+			echo "<div class=response_ok>\"$community_name\" was added successfully</div>\n";
 		break;
 
 	case "modify":
@@ -112,7 +112,7 @@ switch($page_action)
 		if (!update_community($db, $id, $community_name, $alt_name))
 			echo "<div class=response>Update failed</div>\n";
 		else
-			echo "<div class=response>Updated succesfully</div>\n";
+			echo "<div class=response_ok>Updated successfully</div>\n";
 		break;
 }
 
@@ -121,7 +121,9 @@ echo "<H2>Communitites</H2>\n";
 echo "<table>\n";
 echo "<tr id='content'><td>Name<td>Alternate Name<td>Modify<td>Delete</tr>\n";
 foreach ($communities as &$community)
-	echo "<tr id='content'><td>$community[name]<td>$community[alt_name]<td><a href=\"?action=modify&id=$community[id]\"><img src=images/edit.png></a><td>X</tr>\n";
+	echo "<tr id='content'><td>$community[name]<td>$community[alt_name]
+		<td><a href=\"?action=modify&id=$community[id]\"><img src=images/edit.png></a>
+		<td><a href=\"?action=delete&id=$community[id]\" onclick=\"return confirm('Are you sure you want to delete this community?')\"><img src=images/delete.png></a></tr>\n";
 echo "</table>\n";
 
 stop_page();
