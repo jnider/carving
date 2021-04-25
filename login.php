@@ -1,6 +1,7 @@
 <?php
 
-include('db.php');
+include_once('db.php');
+include_once('menu.php');
 
 // Used to track the user's session by logging in and out
 // users are authenticated against the local database so
@@ -60,6 +61,7 @@ HTML;
 	echo "<title>$title</title>\n";
 
 echo <<< HTML
+	<link rel="icon" type="image/png" href="images/icon.png">
 	<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
