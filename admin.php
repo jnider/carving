@@ -1,11 +1,10 @@
 <?php
 
 include_once('login.php');
-include_once('menu.php');
 
 /****************************************/
 // make sure the user is logged in
-if (!is_logged_in() && is_admin())
+if (!is_logged_in() || !is_admin())
 	header('Location: index.php');
 
 // start output
