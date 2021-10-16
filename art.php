@@ -14,7 +14,7 @@ function add_uploaded_picture($db, $item_id, $picture)
 	// check the size
 	if ($picture['size'] == 0 || $picture['size'] > $max_picture_size)
 	{
-		echo "<div class=response>Your picture is too big. It is ${picture['size']} bytes, but the maximum is $max_picture_size</div>\n";
+		echo "<div class='response_bad'>Your picture is too big. It is ${picture['size']} bytes, but the maximum is $max_picture_size</div>\n";
 		return;
 	}
 
@@ -27,7 +27,7 @@ function add_uploaded_picture($db, $item_id, $picture)
 	$uploadfile = $uploaddir . $unique_name;
 	if (!move_uploaded_file($picture['tmp_name'], $uploadfile))
 	{
-		echo "<div class=response>Error storing the picture</div>\n";
+		echo "<div class='response_bad'>Error storing the picture</div>\n";
 		// clean up
 		return;
 	}
@@ -333,7 +333,7 @@ function show_art($db, $item_id)
 	$item = get_item($db, $item_id);
 	if ($item == false)
 	{
-		echo "<div class=response>No items in database!</div>\n";
+		echo "<div class='response_bad'>No items in database!</div>\n";
 		return;
 	}
 	if (!isset($book_id))
@@ -423,7 +423,7 @@ function modify_art_item($db, $item_id, $group)
 	// make sure the user is allowed to update items
 	if ($_SESSION[privilege] != 1)
 	{
-		echo "<div class=response>You do not have permission to modify items</div>\n";
+		echo "<div class='response_bad'>You do not have permission to modify items</div>\n";
 		return FALSE;
 	}
 
@@ -510,7 +510,7 @@ function insert_art_item($db)
 	// make sure the user is allowed to insert items
 	if ($_SESSION[privilege] != 1)
 	{
-		echo "<div class=\'response\'>You do not have permission to add items</div>\n";
+		echo "<div class='response'>You do not have permission to add items</div>\n";
 		return FALSE;
 	}
 
@@ -530,6 +530,12 @@ function insert_art_item($db)
 	$item['purchase_date'] = $_POST['purchase_date'];
 	$item['appraisal'] = $_POST['appraisal'];
 	$item['appraisal_date'] = $_POST['appraisal_date'];
+
+	if ($item['book_id'] == '')
+	{
+		echo "<div class='response_bad'>You must enter a book id.<BR>A book id must be a number (integer) and it must be unique</div>\n";
+		return FALSE;
+	}
 
 	// date fields are sensitive to an empty string (must be NULL instead)
 	if ($item['purchase_date'] == '')
@@ -592,16 +598,21 @@ case "form_modify":
 
 case "insert":
 	if (insert_art_item($db))
-		echo "<div class=response>Item added successfully</div>\n";
+	{
+		echo "<div class='response_ok'>Item added successfully</div>\n";
+	}
 	else
-		echo "<div class=response>Error adding item</div>\n";
+	{
+		$err = pg_last_error($db);
+		echo "<div class='response_bad'>Error adding item<BR>$err</div>\n";
+	}
 	break;
 
 case "modify":
 	$item_id = $_POST['item_id'];
 	$group = $_POST['group'];
 	if (!modify_art_item($db, $item_id, $group))
-		echo "<div class=response>Error updating item</div>\n";
+		echo "<div class='response_bad'>Error updating item</div>\n";
 	show_art($db, $item_id);
 	break;
 
@@ -610,7 +621,7 @@ case "add_picture":
 	$picture = $_FILES['picture'];
 	//echo "Add picture=${picture['name']} to item=$item_id";
 	if (!add_uploaded_picture($db, $item_id, $picture))
-		echo "<div class=response>Error adding picture</div>\n";
+		echo "<div class='response_bad'>Error adding picture</div>\n";
 	show_art($db, $item_id);
 	break;
 
