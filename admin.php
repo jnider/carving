@@ -16,11 +16,15 @@ echo "<H1>Administration</H1>\n";
 // show some statistics
 $num_items = count_items($db);
 $num_collections = count_collections($db);
+$total_purchase_price = sum_purchase_price($db);
+$total_eval_price = eval_price($db);
 
 echo "<h2>Statistics</h2>\n";
 echo "<table>\n";
 echo "<tr><td>There are $num_items entries in the database</tr>\n";
 echo "<tr><td>There are $num_collections collections in the database</tr>\n";
+echo "<tr><td>Total original purchase price: \$$total_purchase_price.00 </tr>\n";
+echo "<tr><td>Currently evaluated price: \$$total_eval_price.00 </tr>\n";
 echo "</table>\n";
 
 echo "<h2>Content Management</h2>\n";
