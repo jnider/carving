@@ -8,28 +8,73 @@ include('login.php');
 function add_uploaded_picture($db, $item_id, $picture)
 { 
 	$uploaddir = '/opt/carving/www/pictures/';
-	$max_picture_size = 1024000;
-	//echo "add_uploaded_picture id=$item_id path=${picture['name']} size=${picture['size']}\n";
 
-	// check the size
-	if ($picture['size'] == 0 || $picture['size'] > $max_picture_size)
+	// make sure it is really a JPEG with exif_imagetype()
+	$ret = exif_imagetype($picture['tmp_name']);
+	if ($ret == false)
 	{
-		echo "<div class='response_bad'>Your picture is too big. It is ${picture['size']} bytes, but the maximum is $max_picture_size</div>\n";
+		echo "<div class='response_bad'>Can't read the uploaded file</div>\n";
 		return;
 	}
 
-	// make sure it is really a JPEG with exif_imagetype()
+	if ($ret != IMAGETYPE_JPEG)
+	{
+		echo "<div class='response_bad'>Only JPEGs are supported</div>\n";
+		return;
+	}
 
 	// generate a unique name
 	$unique_name = sha1_file($picture['tmp_name']) . ".jpg";
-
-	// move it to the correct location
 	$uploadfile = $uploaddir . $unique_name;
-	if (!move_uploaded_file($picture['tmp_name'], $uploadfile))
+
+	// resize the image if necessary, by restricting the width
+	$max_width = 4048;
+	$image_info = getimagesize($picture['tmp_name']);
+	$width = $image_info[0];
+	$height = $image_info[1];
+	echo "width $width height $height<BR>";
+	if ($width > $max_width)
 	{
-		echo "<div class='response_bad'>Error storing the picture</div>\n";
-		// clean up
-		return;
+		$factor =  $max_width / $width;
+		echo "resizing by $factor<BR>";
+		$new_width = intval($width * $factor);
+		$new_height = intval($height * $factor);
+		echo "new width $new_width $new_height<BR>";
+		$orig_image = imagecreatefromjpeg($picture['tmp_name']);
+		if (!$orig_image)
+		{
+			echo "<div class='response_bad'>Error creating image</div>\n";
+			return;
+		}
+		echo "1<BR>";
+		$tmp_img = imagecreatetruecolor($new_width, $new_height);
+		if (!$tmp_img)
+		{
+			echo "<div class='response_bad'>Error creating tmp image</div>\n";
+			return;
+		}
+		echo "2<BR>";
+		if (!imagecopyresampled($tmp_image, $orig_image, 0, 0, 0, 0, $new_width, $new_height, $width, $height))
+		{
+			echo "<div class='response_bad'>Error resampling image</div>\n";
+			return;
+		}
+		echo "3<BR>";
+		if (!imagejpeg($tmp_image, $uploadfile, 96))
+		{
+			echo "<div class='response_bad'>Error writing image</div>\n";
+			return;
+		}
+		echo "OK!<BR>";
+	}
+	else
+	{
+		// move it to the correct location
+		if (!move_uploaded_file($picture['tmp_name'], $uploadfile))
+		{
+			echo "<div class='response_bad'>Error storing the picture</div>\n";
+			return;
+		}
 	}
 
 	// if everything is ok, add it to the database
@@ -619,7 +664,6 @@ case "modify":
 case "add_picture":
 	$item_id = $_POST['item_id'];
 	$picture = $_FILES['picture'];
-	//echo "Add picture=${picture['name']} to item=$item_id";
 	if (!add_uploaded_picture($db, $item_id, $picture))
 		echo "<div class='response_bad'>Error adding picture</div>\n";
 	show_art($db, $item_id);
