@@ -417,7 +417,7 @@ function show_art($db, $item_id)
 	echo "<tr><td>Book ID:<td>${item['book_id']}</tr>";
 	echo "<tr><td>Tag ID:<td>${item['reg_tag']}</tr>";
 	echo "<tr><td>Art Type:<td>$art_type</tr>";
-	echo "<tr><td>Artist:<td>${item['artist']}</tr>";
+	echo "<tr><td>Artist:<td><a href=search.php?action=filter&artist=", urlencode("${item['artist']}"),">${item['artist']}</a></tr>";
 	echo "<tr><td>Material:<td>${item['material']}</tr>";
 	echo "<tr><td>Community:<td>$community</tr>";
 	echo "<tr><td>Description:<td id='description'>${item['description']}</tr>";
