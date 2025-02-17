@@ -43,6 +43,7 @@ function login($db, $username, $password)
 	if (password_verify($password, $stored['pass']))
 	{
 		session_start();
+		$_SESSION['db'] = "carving";
 		$_SESSION['username'] = $username;
 		$_SESSION['privilege'] = $stored['write'];
 		return true;
@@ -69,7 +70,7 @@ echo <<< HTML
 HTML;
 
 	// don't show the menu if the user is not logged in
-	if (isset($_SESSION['username']))
+	if (isset($_SESSION['db']) && ($_SESSION['db'] == "carving"))
 		menu();
 }
 
