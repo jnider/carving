@@ -7,10 +7,14 @@ the entities inside (tables, sequences, etc). Permissions are granted to the
 'carving' user to update the information, but not the database schema itself.
 
 ## Installation
-On Ubuntu/Debian:
+On Ubuntu 18/Debian:
+```
+sudo apt install apache2 postgresql zip
+
 sudo pg_createcluster 10 default
 sudo systemctl restart postgresql
 sudo apt install php7.2-pgsql
+```
 
 ## Configuration
 Modify - change local authentication to 'trust'
@@ -38,4 +42,3 @@ It should have a single variable defined like this:
 <?php
 $conn_string = "host=127.0.0.1 port=5432 user=*** dbname=*** password=***";
 ?>
-
