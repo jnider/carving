@@ -2,14 +2,32 @@
 
 include('login.php');
 
-function show_controls($filter)
+/*
+	These control the search criteria to filter the results
+
+	The filters are displayed in a table and selected using a form
+	The 'id' field must be set for the remove JS function to work
+	Multiple filters can be used together
+*/
+function show_controls($db, $filter)
 {
+	// get list of art types
+	$art_types = get_art_types($db);
+
 	echo "<h2>Filter Controls</h2>\n";
 	echo "<form name='filter_form' autocomplete='off'>\n";
 	echo "<input type=hidden name='action' value='filter'>\n";
 	echo "<table>\n";
-	echo "\n";
 	echo "<tr><td>Artist Name<td><div class='autocomplete' style='width:300px;'><input type='text' id='artist' name='artist' placeholder='artist name' value=\"${filter['artist']}\"></div></tr>\n"; 
+	echo "<tr><td>Art Type:<td><select id='art_type' name='art_type'>";
+	foreach ($art_types as &$art_type)
+	{
+		$id = $art_type['id'];
+		$type = $art_type['type'];
+		echo "<option value=\"$id\">$type\n";
+	}
+	echo "	</select></tr>\n";
+
 	echo "<tr><td>Pictures<td><input type=checkbox id='picture' class='picture' name='picture' ${filter['picture']}>With pictures</input>\n";
 	echo "<input type=checkbox id='no_picture' name='no_picture' ${filter['no_picture']}>Without pictures</input></tr>\n";
 	echo "</table>\n";
@@ -21,6 +39,17 @@ function show_controls($filter)
 		echo "<div class='filter' onclick=\"cb_uncheck('picture');\">With pictures &#x2715</div>\n";
 	if ($filter['no_picture'] == "checked")
 		echo "<div class='filter' onclick=\"cb_uncheck('no_picture');\">Without pictures &#x2715</div>\n";
+	if (isset($filter['art_type']))
+	{
+		$art_type_name = "Unknown";
+		foreach ($art_types as &$art_type)
+		{
+			if ($filter['art_type'] == $art_type['id'])
+				$art_type_name = $art_type['type'];
+		}
+		echo "<div class='filter' onclick=\"remove_filter('art_type');\">${art_type_name} &#x2715</div>\n";
+	}
+
 	if (isset($filter['artist']))
 		echo "<div class='filter' onclick=\"remove_filter('artist');\">${filter['artist']} &#x2715</div>\n";
 	echo "</div>\n";
@@ -50,6 +79,8 @@ if (isset($page_action))
 			$filter['picture'] = "checked";
 		if (isset($_GET['no_picture']) && $_GET['no_picture'] == "on")
 			$filter['no_picture'] = "checked";
+		if (isset($_GET['art_type']) && $_GET['art_type'] != '')
+			$filter['art_type'] = $_GET['art_type'];
 		if (isset($_GET['artist']) && $_GET['artist'] != '')
 			$filter['artist'] = $_GET['artist'];
 		break;
@@ -57,7 +88,7 @@ if (isset($page_action))
 }
 
 // show filter controls
-show_controls($filter);
+show_controls($db, $filter);
 
 // display results in a grid
 $items = get_art($db);
@@ -81,6 +112,9 @@ foreach ($items as &$item)
 		continue;
 
 	if ($filter['no_picture'] == "checked" && $pictures != FALSE)
+		continue;
+
+	if (isset($filter['art_type']) && $item['art_type'] != $filter['art_type'])
 		continue;
 
 	// check for an exact match with the artist name
@@ -129,6 +163,7 @@ function remove_filter(element_id) {
 }
 
 // set the onclick handler without inline js
+document.getElementById('art_type').onchange = filter_submit;
 document.getElementById('picture').onclick = filter_submit;
 document.getElementById('no_picture').onclick = filter_submit;
 
